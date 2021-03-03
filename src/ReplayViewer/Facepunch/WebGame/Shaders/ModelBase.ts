@@ -1,131 +1,127 @@
-namespace Facepunch {
-    export namespace WebGame {
-        export namespace Shaders {
-            export class ModelBaseMaterialProps extends BaseMaterialProps {
-                baseTexture: Texture = null;
-                noFog = false;
-                translucent = false;
-                shadowCast = true;
-            }
+import { BaseMaterialProps, Texture, BaseShaderProgram, UniformMatrix4, UniformSampler, Uniform4F, Uniform3F, Uniform1F, VertexAttribute, TextureUtils, CommandBuffer, Camera, Game, Fog } from "..";
 
-            export abstract class ModelBase<TMaterialProps extends ModelBaseMaterialProps>
-                extends BaseShaderProgram<TMaterialProps> {
-                readonly projectionMatrix: UniformMatrix4;
-                readonly viewMatrix: UniformMatrix4;
-                readonly modelMatrix: UniformMatrix4;
+export class ModelBaseMaterialProps extends BaseMaterialProps {
+    baseTexture: Texture | null = null;
+    noFog = false;
+    translucent = false;
+    shadowCast = true;
+}
 
-                readonly baseTexture: UniformSampler;
-                readonly time: Uniform4F;
-                readonly fogParams: Uniform4F;
-                readonly fogColor: Uniform3F;
-                readonly noFog: Uniform1F;
+export abstract class ModelBase<TMaterialProps extends ModelBaseMaterialProps>
+    extends BaseShaderProgram<TMaterialProps> {
+    readonly projectionMatrix: UniformMatrix4;
+    readonly viewMatrix: UniformMatrix4;
+    readonly modelMatrix: UniformMatrix4;
 
-                constructor(context: WebGLRenderingContext, ctor: {new(): TMaterialProps}) {
-                    super(context, ctor);
+    readonly baseTexture: UniformSampler;
+    readonly time: Uniform4F;
+    readonly fogParams: Uniform4F;
+    readonly fogColor: Uniform3F;
+    readonly noFog: Uniform1F;
 
-                    const gl = context;
+    constructor(context: WebGLRenderingContext, ctor: {new(): TMaterialProps}) {
+        super(context, ctor);
 
-                    this.includeShaderSource(gl.VERTEX_SHADER, `
-                        attribute vec3 aPosition;
-                        attribute vec2 aTextureCoord;
+        const gl = context;
 
-                        varying float vDepth;
-                        varying vec2 vTextureCoord;
+        this.includeShaderSource(gl.VERTEX_SHADER, `
+            attribute vec3 aPosition;
+            attribute vec2 aTextureCoord;
 
-                        uniform mat4 uProjection;
-                        uniform mat4 uView;
-                        uniform mat4 uModel;
+            varying float vDepth;
+            varying vec2 vTextureCoord;
 
-                        void Base_main()
-                        {
-                            vec4 viewPos = uView * uModel * vec4(aPosition, 1.0);
+            uniform mat4 uProjection;
+            uniform mat4 uView;
+            uniform mat4 uModel;
 
-                            gl_Position = uProjection * viewPos;
-                            
-                            vDepth = -viewPos.z;
-                            vTextureCoord = aTextureCoord;
-                        }`);
+            void Base_main()
+            {
+                vec4 viewPos = uView * uModel * vec4(aPosition, 1.0);
 
-                    this.includeShaderSource(gl.FRAGMENT_SHADER, `
-                        precision mediump float;
+                gl_Position = uProjection * viewPos;
+                
+                vDepth = -viewPos.z;
+                vTextureCoord = aTextureCoord;
+            }`);
 
-                        varying float vDepth;
-                        varying vec2 vTextureCoord;
+        this.includeShaderSource(gl.FRAGMENT_SHADER, `
+            precision mediump float;
 
-                        uniform sampler2D uBaseTexture;
+            varying float vDepth;
+            varying vec2 vTextureCoord;
 
-                        // x: time in seconds, y, z, w: unused
-                        uniform vec4 uTime;
+            uniform sampler2D uBaseTexture;
 
-                        // x: near fog density, y: far plane fog density, z: min density, w: max density
-                        uniform vec4 uFogParams;
-                        uniform vec3 uFogColor;
-                        uniform float uNoFog;
+            // x: time in seconds, y, z, w: unused
+            uniform vec4 uTime;
 
-                        vec3 ApplyFog(vec3 inColor)
-                        {
-                            if (uNoFog > 0.5) return inColor;
+            // x: near fog density, y: far plane fog density, z: min density, w: max density
+            uniform vec4 uFogParams;
+            uniform vec3 uFogColor;
+            uniform float uNoFog;
 
-                            float fogDensity = uFogParams.x + uFogParams.y * vDepth;
+            vec3 ApplyFog(vec3 inColor)
+            {
+                if (uNoFog > 0.5) return inColor;
 
-                            fogDensity = min(max(fogDensity, uFogParams.z), uFogParams.w);
+                float fogDensity = uFogParams.x + uFogParams.y * vDepth;
 
-                            return mix(inColor, uFogColor, fogDensity);
-                        }`);
+                fogDensity = min(max(fogDensity, uFogParams.z), uFogParams.w);
 
-                    this.addAttribute("aPosition", VertexAttribute.position);
-                    this.addAttribute("aTextureCoord", VertexAttribute.uv);
+                return mix(inColor, uFogColor, fogDensity);
+            }`);
 
-                    this.projectionMatrix = this.addUniform("uProjection", UniformMatrix4);
-                    this.viewMatrix = this.addUniform("uView", UniformMatrix4);
-                    this.modelMatrix = this.addUniform("uModel", UniformMatrix4);
+        this.addAttribute("aPosition", VertexAttribute.position);
+        this.addAttribute("aTextureCoord", VertexAttribute.uv);
 
-                    this.baseTexture = this.addUniform("uBaseTexture", UniformSampler);
-                    this.baseTexture.setDefault(TextureUtils.getErrorTexture(context));
+        this.projectionMatrix = this.addUniform("uProjection", UniformMatrix4);
+        this.viewMatrix = this.addUniform("uView", UniformMatrix4);
+        this.modelMatrix = this.addUniform("uModel", UniformMatrix4);
 
-                    this.time = this.addUniform("uTime", Uniform4F);
-                    this.fogParams = this.addUniform("uFogParams", Uniform4F);
-                    this.fogColor = this.addUniform("uFogColor", Uniform3F);
-                    this.noFog = this.addUniform("uNoFog", Uniform1F);
-                }
+        this.baseTexture = this.addUniform("uBaseTexture", UniformSampler);
+        this.baseTexture.setDefault(TextureUtils.getErrorTexture(context));
 
-                bufferSetup(buf: CommandBuffer): void {
-                    super.bufferSetup(buf);
+        this.time = this.addUniform("uTime", Uniform4F);
+        this.fogParams = this.addUniform("uFogParams", Uniform4F);
+        this.fogColor = this.addUniform("uFogColor", Uniform3F);
+        this.noFog = this.addUniform("uNoFog", Uniform1F);
+    }
 
-                    this.projectionMatrix.bufferParameter(buf, Camera.projectionMatrixParam);
-                    this.viewMatrix.bufferParameter(buf, Camera.viewMatrixParam);
+    bufferSetup(buf: CommandBuffer): void {
+        super.bufferSetup(buf);
 
-                    this.time.bufferParameter(buf, Game.timeInfoParam);
-                    this.fogParams.bufferParameter(buf, Fog.fogInfoParam);
-                    this.fogColor.bufferParameter(buf, Fog.fogColorParam);
-                }
+        this.projectionMatrix.bufferParameter(buf, Camera.projectionMatrixParam);
+        this.viewMatrix.bufferParameter(buf, Camera.viewMatrixParam);
 
-                bufferModelMatrix(buf: CommandBuffer, value: Float32Array): void {
-                    super.bufferModelMatrix(buf, value);
+        this.time.bufferParameter(buf, Game.timeInfoParam);
+        this.fogParams.bufferParameter(buf, Fog.fogInfoParam);
+        this.fogColor.bufferParameter(buf, Fog.fogColorParam);
+    }
 
-                    this.modelMatrix.bufferValue(buf, false, value);
-                }
+    bufferModelMatrix(buf: CommandBuffer, value: Float32Array): void {
+        super.bufferModelMatrix(buf, value);
 
-                bufferMaterialProps(buf: CommandBuffer, props: TMaterialProps): void {
-                    super.bufferMaterialProps(buf, props);
+        this.modelMatrix.bufferValue(buf, false, value);
+    }
 
-                    this.baseTexture.bufferValue(buf, props.baseTexture);
-                    this.noFog.bufferValue(buf, props.noFog ? 1 : 0);
+    bufferMaterialProps(buf: CommandBuffer, props: TMaterialProps): void {
+        super.bufferMaterialProps(buf, props);
 
-                    const gl = this.context;
+        this.baseTexture.bufferValue(buf, props.baseTexture!);
+        this.noFog.bufferValue(buf, props.noFog ? 1 : 0);
 
-                    buf.enable(gl.DEPTH_TEST);
+        const gl = this.context;
 
-                    if (props.translucent) {
-                        buf.depthMask(false);
-                        buf.enable(gl.BLEND);
-                        buf.blendFuncSeparate(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA, gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
-                    } else {
-                        buf.depthMask(true);
-                        buf.disable(gl.BLEND);
-                    }
-                }
-            }
+        buf.enable(gl.DEPTH_TEST);
+
+        if (props.translucent) {
+            buf.depthMask(false);
+            buf.enable(gl.BLEND);
+            buf.blendFuncSeparate(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA, gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
+        } else {
+            buf.depthMask(true);
+            buf.disable(gl.BLEND);
         }
     }
 }

@@ -1,40 +1,36 @@
-/// <reference path="Entity.ts"/>
+import { Entity, IDrawListItem, DrawListItem, DrawList, MeshHandle } from ".";
 
-namespace Facepunch {
-    export namespace WebGame {
-        export class DrawableEntity extends Entity implements IDrawListItem {
-            protected readonly drawable = new DrawListItem();
+export class DrawableEntity extends Entity implements IDrawListItem {
+    protected readonly drawable = new DrawListItem();
 
-            constructor(isStatic: boolean = false) {
-                super();
+    constructor(isStatic: boolean = false) {
+        super();
 
-                this.drawable.entity = this;
-                this.drawable.isStatic = isStatic;
-            }
+        this.drawable.entity = this;
+        this.drawable.isStatic = isStatic;
+    }
 
-            invalidateDrawLists(): void {
-                this.drawable.invalidateDrawLists();
-            }
+    invalidateDrawLists(): void {
+        this.drawable.invalidateDrawLists();
+    }
 
-            getIsVisible(): boolean {
-                return this.drawable.getIsVisible();
-            }
+    getIsVisible(): boolean {
+        return this.drawable.getIsVisible();
+    }
 
-            getIsInDrawList(drawList: DrawList): boolean {
-                return this.drawable.getIsInDrawList(drawList);
-            }
+    getIsInDrawList(drawList: DrawList): boolean {
+        return this.drawable.getIsInDrawList(drawList);
+    }
 
-            onAddToDrawList(list: DrawList): void {
-                this.drawable.onAddToDrawList(list);
-            }
+    onAddToDrawList(list: DrawList): void {
+        this.drawable.onAddToDrawList(list);
+    }
 
-            onRemoveFromDrawList(list: DrawList): void {
-                this.drawable.onRemoveFromDrawList(list);
-            }
+    onRemoveFromDrawList(list: DrawList): void {
+        this.drawable.onRemoveFromDrawList(list);
+    }
 
-            getMeshHandles(): MeshHandle[] {
-                return this.drawable.getMeshHandles();
-            }
-        }
+    getMeshHandles(): MeshHandle[] {
+        return this.drawable.getMeshHandles();
     }
 }

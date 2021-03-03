@@ -1,67 +1,63 @@
-namespace Facepunch {
-    export namespace WebGame {
-        export namespace Shaders {
-            export class ComposeFrame extends ShaderProgram {
-                readonly frameColor: UniformSampler;
-                readonly frameDepth: UniformSampler;
+import { Camera, CommandBuffer, ShaderProgram, UniformSampler, VertexAttribute } from "..";
 
-                constructor(context: WebGLRenderingContext) {
-                    super(context);
+export class ComposeFrame extends ShaderProgram {
+    readonly frameColor: UniformSampler;
+    readonly frameDepth: UniformSampler;
 
-                    const gl = context;
+    constructor(context: WebGLRenderingContext) {
+        super(context);
 
-                    this.includeShaderSource(gl.VERTEX_SHADER, `
-                        attribute vec2 aScreenPos;
+        const gl = context;
 
-                        varying vec2 vScreenPos;
+        this.includeShaderSource(gl.VERTEX_SHADER, `
+            attribute vec2 aScreenPos;
 
-                        void main()
-                        {
-                            vScreenPos = aScreenPos * 0.5 + vec2(0.5, 0.5);
-                            gl_Position = vec4(aScreenPos, 0, 1);
-                        }`);
+            varying vec2 vScreenPos;
 
-                    this.includeShaderSource(gl.FRAGMENT_SHADER, `
-                        #extension GL_EXT_frag_depth : enable
+            void main()
+            {
+                vScreenPos = aScreenPos * 0.5 + vec2(0.5, 0.5);
+                gl_Position = vec4(aScreenPos, 0, 1);
+            }`);
 
-                        precision mediump float;
+        this.includeShaderSource(gl.FRAGMENT_SHADER, `
+            #extension GL_EXT_frag_depth : enable
 
-                        varying vec2 vScreenPos;
+            precision mediump float;
 
-                        uniform sampler2D uFrameColor;
-                        uniform sampler2D uFrameDepth;
+            varying vec2 vScreenPos;
 
-                        void main()
-                        {
-                            vec4 sample = texture2D(uFrameColor, vScreenPos);
-                            float depth = texture2D(uFrameDepth, vScreenPos).r;
+            uniform sampler2D uFrameColor;
+            uniform sampler2D uFrameDepth;
 
-                            if (sample.a <= 0.004 || depth >= 1.0) discard;
+            void main()
+            {
+                vec4 sample = texture2D(uFrameColor, vScreenPos);
+                float depth = texture2D(uFrameDepth, vScreenPos).r;
 
-                            gl_FragColor = sample;
-                            gl_FragDepthEXT = depth;
-                        }`);
+                if (sample.a <= 0.004 || depth >= 1.0) discard;
 
-                    this.addAttribute("aScreenPos", VertexAttribute.uv);
+                gl_FragColor = sample;
+                gl_FragDepthEXT = depth;
+            }`);
 
-                    this.frameColor = this.addUniform("uFrameColor", UniformSampler);
-                    this.frameDepth = this.addUniform("uFrameDepth", UniformSampler);
+        this.addAttribute("aScreenPos", VertexAttribute.uv);
 
-                    this.compile();
-                }
+        this.frameColor = this.addUniform("uFrameColor", UniformSampler);
+        this.frameDepth = this.addUniform("uFrameDepth", UniformSampler);
 
-                bufferSetup(buf: CommandBuffer): void {
-                    super.bufferSetup(buf);
+        this.compile();
+    }
 
-                    this.frameColor.bufferParameter(buf, Camera.opaqueColorParam);
-                    this.frameDepth.bufferParameter(buf, Camera.opaqueDepthParam);
+    bufferSetup(buf: CommandBuffer): void {
+        super.bufferSetup(buf);
 
-                    const gl = this.context;
+        this.frameColor.bufferParameter(buf, Camera.opaqueColorParam);
+        this.frameDepth.bufferParameter(buf, Camera.opaqueDepthParam);
 
-                    buf.disable(gl.CULL_FACE);
-                    buf.depthMask(true);
-                }
-            }
-        }
+        const gl = this.context;
+
+        buf.disable(gl.CULL_FACE);
+        buf.depthMask(true);
     }
 }

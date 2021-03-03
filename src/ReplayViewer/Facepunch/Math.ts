@@ -1,839 +1,837 @@
-namespace Facepunch {
-    export interface IVector2 {
-        x: number;
-        y: number;
+export interface IVector2 {
+    x: number;
+    y: number;
+}
+
+export class Vector2 implements IVector2 {
+    x: number;
+    y: number;
+
+    constructor(x?: number, y?: number) {
+        this.x = x || 0;
+        this.y = y || 0;
     }
 
-    export class Vector2 implements IVector2 {
-        x: number;
-        y: number;
-
-        constructor(x?: number, y?: number) {
-            this.x = x || 0;
-            this.y = y || 0;
-        }
-
-        length(): number {
-            const x = this.x, y = this.y;
-            return Math.sqrt(x * x + y * y);
-        }
-
-        lengthSq(): number {
-            const x = this.x, y = this.y;
-            return x * x + y * y;
-        }
-
-        set(x: number, y: number): this {
-            this.x = x;
-            this.y = y;
-            return this;
-        }
-
-        add(x: number, y: number): this;
-        add(vec: IVector2): this;
-        add(vecOrX: IVector2 | number, y?: number): this {
-            if (typeof vecOrX !== "number") {
-                this.x += vecOrX.x;
-                this.y += vecOrX.y;
-            } else {
-                this.x += vecOrX;
-                this.y += y;
-            }
-            return this;
-        }
-
-        sub(x: number, y: number): this;
-        sub(vec: IVector2): this;
-        sub(vecOrX: IVector2 | number, y?: number): this {
-            if (typeof vecOrX !== "number") {
-                this.x -= vecOrX.x;
-                this.y -= vecOrX.y;
-            } else {
-                this.x -= vecOrX;
-                this.y -= y;
-            }
-            return this;
-        }
-
-        multiplyScalar(val: number): this {
-            this.x *= val;
-            this.y *= val;
-            return this;
-        }
-
-        copy(vec: IVector2): this {
-            this.x = vec.x;
-            this.y = vec.y;
-            return this;
-        }
+    length(): number {
+        const x = this.x, y = this.y;
+        return Math.sqrt(x * x + y * y);
     }
 
-    export interface IVector3 extends IVector2 {
-        z: number;
+    lengthSq(): number {
+        const x = this.x, y = this.y;
+        return x * x + y * y;
     }
 
-    export class Vector3 implements IVector3 {
-
-        static readonly zero = new Vector3(0, 0, 0);
-        static readonly one = new Vector3(1, 1, 1);
-        
-        static readonly unitX = new Vector3(1, 0, 0);
-        static readonly unitY = new Vector3(0, 1, 0);
-        static readonly unitZ = new Vector3(0, 0, 1);
-
-        x: number;
-        y: number;
-        z: number;
-
-        constructor(x?: number, y?: number, z?: number) {
-            this.x = x || 0;
-            this.y = y || 0;
-            this.z = z || 0;
-        }
-
-        length(): number {
-            const x = this.x, y = this.y, z = this.z;
-            return Math.sqrt(x * x + y * y + z * z);
-        }
-
-        lengthSq(): number {
-            const x = this.x, y = this.y, z = this.z;
-            return x * x + y * y + z * z;
-        }
-
-        normalize(): this {
-            const length = this.length();
-            this.x /= length;
-            this.y /= length;
-            this.z /= length;
-            return this;
-        }
-
-        set(x: number, y: number, z: number): this {
-            this.x = x;
-            this.y = y;
-            this.z = z;
-            return this;
-        }
-
-        add(x: number, y: number, z: number): this;
-        add(vec: IVector3): this;
-        add(vecOrX: IVector3 | number, y?: number, z?: number): this {
-            if (typeof vecOrX !== "number") {
-                this.x += vecOrX.x;
-                this.y += vecOrX.y;
-                this.z += vecOrX.z;
-            } else {
-                this.x += vecOrX;
-                this.y += y;
-                this.z += z;
-            }
-            return this;
-        }
-
-        sub(x: number, y: number, z: number): this;
-        sub(vec: IVector3): this;
-        sub(vecOrX: IVector3 | number, y?: number, z?: number): this {
-            if (typeof vecOrX !== "number") {
-                this.x -= vecOrX.x;
-                this.y -= vecOrX.y;
-                this.z -= vecOrX.z;
-            } else {
-                this.x -= vecOrX;
-                this.y -= y;
-                this.z -= z;
-            }
-            return this;
-        }
-
-        multiply(x: number, y: number, z: number): this;
-        multiply(vec: IVector3): this;
-        multiply(vecOrX: IVector3 | number, y?: number, z?: number): this {
-            if (typeof vecOrX !== "number") {
-                this.x *= vecOrX.x;
-                this.y *= vecOrX.y;
-                this.z *= vecOrX.z;
-            } else {
-                this.x *= vecOrX;
-                this.y *= y;
-                this.z *= z;
-            }
-            return this;
-        }
-        
-        cross(vec: IVector3): this {
-            const x = this.x;
-            const y = this.y;
-            const z = this.z;
-
-            this.x = y * vec.z - z * vec.y;
-            this.y = z * vec.x - x * vec.z;
-            this.z = x * vec.y - y * vec.x;
-
-            return this;
-        }
-
-        divide(vec: IVector3): this {
-            this.x /= vec.x;
-            this.y /= vec.y;
-            this.z /= vec.z;
-            return this;
-        }
-
-        multiplyScalar(val: number): this
-        {
-            this.x *= val;
-            this.y *= val;
-            this.z *= val;
-            return this;
-        }
-
-        dot(vec: IVector3): number {
-            return this.x * vec.x + this.y * vec.y + this.z * vec.z;
-        }
-
-        copy(vec: IVector3): this {
-            this.x = vec.x;
-            this.y = vec.y;
-            this.z = vec.z;
-            return this;
-        }
-
-        applyQuaternion(quat: Quaternion): this {
-            // From https://github.com/mrdoob/three.js
-
-            const x = this.x, y = this.y, z = this.z;
-            const qx = quat.x, qy = quat.y, qz = quat.z, qw = quat.w;
-
-            // calculate quat * vector
-
-            const ix = qw * x + qy * z - qz * y;
-            const iy = qw * y + qz * x - qx * z;
-            const iz = qw * z + qx * y - qy * x;
-            const iw = - qx * x - qy * y - qz * z;
-
-            // calculate result * inverse quat
-
-            this.x = ix * qw + iw * - qx + iy * - qz - iz * - qy;
-            this.y = iy * qw + iw * - qy + iz * - qx - ix * - qz;
-            this.z = iz * qw + iw * - qz + ix * - qy - iy * - qx;
-
-            return this;
-        }
-
-        setNormal(vec: IVector3): this {
-            const x = vec.x, y = vec.y, z = vec.z;
-            const invLen = 1 / Math.sqrt(x * x + y * y + z * z);
-
-            this.x = x * invLen;
-            this.y = y * invLen;
-            this.z = z * invLen;
-            return this;
-        }
+    set(x: number, y: number): this {
+        this.x = x;
+        this.y = y;
+        return this;
     }
 
-    export interface IVector4 extends IVector3 {
-        w: number;
+    add(x: number, y: number): this;
+    add(vec: IVector2): this;
+    add(vecOrX: IVector2 | number, y?: number): this {
+        if (typeof vecOrX !== "number") {
+            this.x += vecOrX.x;
+            this.y += vecOrX.y;
+        } else {
+            this.x += vecOrX;
+            this.y += y as number;
+        }
+        return this;
     }
 
-    export class Vector4 implements IVector4 {
-
-        x: number;
-        y: number;
-        z: number;
-        w: number;
-
-        constructor(x?: number, y?: number, z?: number, w?: number) {
-            this.x = x || 0;
-            this.y = y || 0;
-            this.z = z || 0;
-            this.w = w || 0;
+    sub(x: number, y: number): this;
+    sub(vec: IVector2): this;
+    sub(vecOrX: IVector2 | number, y?: number): this {
+        if (typeof vecOrX !== "number") {
+            this.x -= vecOrX.x;
+            this.y -= vecOrX.y;
+        } else {
+            this.x -= vecOrX;
+            this.y -= y as number;
         }
-
-        length(): number {
-            const x = this.x, y = this.y, z = this.z, w = this.w;
-            return Math.sqrt(x * x + y * y + z * z + w * w);
-        }
-
-        lengthSq(): number {
-            const x = this.x, y = this.y, z = this.z, w = this.w;
-            return x * x + y * y + z * z + w * w;
-        }
-
-        lengthXyz(): number {
-            const x = this.x, y = this.y, z = this.z;
-            return Math.sqrt(x * x + y * y + z * z);
-        }
-
-        lengthSqXyz(): number {
-            const x = this.x, y = this.y, z = this.z;
-            return x * x + y * y + z * z;
-        }
-
-        normalize(): this {
-            const length = this.length();
-            this.x /= length;
-            this.y /= length;
-            this.z /= length;
-            this.w /= length;
-            return this;
-        }
-
-        normalizeXyz(): this {
-            const length = this.lengthXyz();
-            this.x /= length;
-            this.y /= length;
-            this.z /= length;
-            return this;
-        }
-
-        set(x: number, y: number, z: number, w: number): this {
-            this.x = x;
-            this.y = y;
-            this.z = z;
-            this.w = w;
-            return this;
-        }
-
-        multiplyScalar(val: number): this {
-            this.x *= val;
-            this.y *= val;
-            this.z *= val;
-            this.w *= val;
-            return this;
-        }
-
-        applyQuaternion(quat: Quaternion): this {
-            // From https://github.com/mrdoob/three.js
-
-            const x = this.x, y = this.y, z = this.z;
-            const qx = quat.x, qy = quat.y, qz = quat.z, qw = quat.w;
-
-            // calculate quat * vector
-
-            const ix = qw * x + qy * z - qz * y;
-            const iy = qw * y + qz * x - qx * z;
-            const iz = qw * z + qx * y - qy * x;
-            const iw = - qx * x - qy * y - qz * z;
-
-            // calculate result * inverse quat
-
-            this.x = ix * qw + iw * - qx + iy * - qz - iz * - qy;
-            this.y = iy * qw + iw * - qy + iz * - qx - ix * - qz;
-            this.z = iz * qw + iw * - qz + ix * - qy - iy * - qx;
-
-            return this;
-        }
-
-        applyMatrix4(mat: Matrix4): this {
-            const x = this.x, y = this.y, z = this.z, w = this.w;
-            const m = mat.elements;
-
-            this.x = m[0x0] * x + m[0x4] * y + m[0x8] * z + m[0xc] * w;
-            this.y = m[0x1] * x + m[0x5] * y + m[0x9] * z + m[0xd] * w;
-            this.z = m[0x2] * x + m[0x6] * y + m[0xa] * z + m[0xe] * w;
-            this.w = m[0x3] * x + m[0x7] * y + m[0xb] * z + m[0xf] * w;
-
-            return this;
-        }
+        return this;
     }
 
-    export class Quaternion implements IVector4 {
-        x: number;
-        y: number;
-        z: number;
-        w: number;
+    multiplyScalar(val: number): this {
+        this.x *= val;
+        this.y *= val;
+        return this;
+    }
 
-        constructor(x?: number, y?: number, z?: number, w?: number) {
-            this.x = x || 0;
-            this.y = y || 0;
-            this.z = z || 0;
-            this.w = w || 0;
+    copy(vec: IVector2): this {
+        this.x = vec.x;
+        this.y = vec.y;
+        return this;
+    }
+}
+
+export interface IVector3 extends IVector2 {
+    z: number;
+}
+
+export class Vector3 implements IVector3 {
+
+    static readonly zero = new Vector3(0, 0, 0);
+    static readonly one = new Vector3(1, 1, 1);
+    
+    static readonly unitX = new Vector3(1, 0, 0);
+    static readonly unitY = new Vector3(0, 1, 0);
+    static readonly unitZ = new Vector3(0, 0, 1);
+
+    x: number;
+    y: number;
+    z: number;
+
+    constructor(x?: number, y?: number, z?: number) {
+        this.x = x || 0;
+        this.y = y || 0;
+        this.z = z || 0;
+    }
+
+    length(): number {
+        const x = this.x, y = this.y, z = this.z;
+        return Math.sqrt(x * x + y * y + z * z);
+    }
+
+    lengthSq(): number {
+        const x = this.x, y = this.y, z = this.z;
+        return x * x + y * y + z * z;
+    }
+
+    normalize(): this {
+        const length = this.length();
+        this.x /= length;
+        this.y /= length;
+        this.z /= length;
+        return this;
+    }
+
+    set(x: number, y: number, z: number): this {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        return this;
+    }
+
+    add(x: number, y: number, z: number): this;
+    add(vec: IVector3): this;
+    add(vecOrX: IVector3 | number, y?: number, z?: number): this {
+        if (typeof vecOrX !== "number") {
+            this.x += vecOrX.x;
+            this.y += vecOrX.y;
+            this.z += vecOrX.z;
+        } else {
+            this.x += vecOrX;
+            this.y += y as number;
+            this.z += z as number;
         }
+        return this;
+    }
 
-        copy(quat: Quaternion): this {
-            this.x = quat.x;
-            this.y = quat.y;
-            this.z = quat.z;
-            this.w = quat.w;
-            return this;
+    sub(x: number, y: number, z: number): this;
+    sub(vec: IVector3): this;
+    sub(vecOrX: IVector3 | number, y?: number, z?: number): this {
+        if (typeof vecOrX !== "number") {
+            this.x -= vecOrX.x;
+            this.y -= vecOrX.y;
+            this.z -= vecOrX.z;
+        } else {
+            this.x -= vecOrX;
+            this.y -= y as number;
+            this.z -= z as number;
         }
+        return this;
+    }
 
-        setIdentity(): this {
-            this.x = 0;
-            this.y = 0;
-            this.z = 0;
+    multiply(x: number, y: number, z: number): this;
+    multiply(vec: IVector3): this;
+    multiply(vecOrX: IVector3 | number, y?: number, z?: number): this {
+        if (typeof vecOrX !== "number") {
+            this.x *= vecOrX.x;
+            this.y *= vecOrX.y;
+            this.z *= vecOrX.z;
+        } else {
+            this.x *= vecOrX;
+            this.y *= y as number;
+            this.z *= z as number;
+        }
+        return this;
+    }
+    
+    cross(vec: IVector3): this {
+        const x = this.x;
+        const y = this.y;
+        const z = this.z;
+
+        this.x = y * vec.z - z * vec.y;
+        this.y = z * vec.x - x * vec.z;
+        this.z = x * vec.y - y * vec.x;
+
+        return this;
+    }
+
+    divide(vec: IVector3): this {
+        this.x /= vec.x;
+        this.y /= vec.y;
+        this.z /= vec.z;
+        return this;
+    }
+
+    multiplyScalar(val: number): this
+    {
+        this.x *= val;
+        this.y *= val;
+        this.z *= val;
+        return this;
+    }
+
+    dot(vec: IVector3): number {
+        return this.x * vec.x + this.y * vec.y + this.z * vec.z;
+    }
+
+    copy(vec: IVector3): this {
+        this.x = vec.x;
+        this.y = vec.y;
+        this.z = vec.z;
+        return this;
+    }
+
+    applyQuaternion(quat: Quaternion): this {
+        // From https://github.com/mrdoob/three.js
+
+        const x = this.x, y = this.y, z = this.z;
+        const qx = quat.x, qy = quat.y, qz = quat.z, qw = quat.w;
+
+        // calculate quat * vector
+
+        const ix = qw * x + qy * z - qz * y;
+        const iy = qw * y + qz * x - qx * z;
+        const iz = qw * z + qx * y - qy * x;
+        const iw = - qx * x - qy * y - qz * z;
+
+        // calculate result * inverse quat
+
+        this.x = ix * qw + iw * - qx + iy * - qz - iz * - qy;
+        this.y = iy * qw + iw * - qy + iz * - qx - ix * - qz;
+        this.z = iz * qw + iw * - qz + ix * - qy - iy * - qx;
+
+        return this;
+    }
+
+    setNormal(vec: IVector3): this {
+        const x = vec.x, y = vec.y, z = vec.z;
+        const invLen = 1 / Math.sqrt(x * x + y * y + z * z);
+
+        this.x = x * invLen;
+        this.y = y * invLen;
+        this.z = z * invLen;
+        return this;
+    }
+}
+
+export interface IVector4 extends IVector3 {
+    w: number;
+}
+
+export class Vector4 implements IVector4 {
+
+    x: number;
+    y: number;
+    z: number;
+    w: number;
+
+    constructor(x?: number, y?: number, z?: number, w?: number) {
+        this.x = x || 0;
+        this.y = y || 0;
+        this.z = z || 0;
+        this.w = w || 0;
+    }
+
+    length(): number {
+        const x = this.x, y = this.y, z = this.z, w = this.w;
+        return Math.sqrt(x * x + y * y + z * z + w * w);
+    }
+
+    lengthSq(): number {
+        const x = this.x, y = this.y, z = this.z, w = this.w;
+        return x * x + y * y + z * z + w * w;
+    }
+
+    lengthXyz(): number {
+        const x = this.x, y = this.y, z = this.z;
+        return Math.sqrt(x * x + y * y + z * z);
+    }
+
+    lengthSqXyz(): number {
+        const x = this.x, y = this.y, z = this.z;
+        return x * x + y * y + z * z;
+    }
+
+    normalize(): this {
+        const length = this.length();
+        this.x /= length;
+        this.y /= length;
+        this.z /= length;
+        this.w /= length;
+        return this;
+    }
+
+    normalizeXyz(): this {
+        const length = this.lengthXyz();
+        this.x /= length;
+        this.y /= length;
+        this.z /= length;
+        return this;
+    }
+
+    set(x: number, y: number, z: number, w: number): this {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.w = w;
+        return this;
+    }
+
+    multiplyScalar(val: number): this {
+        this.x *= val;
+        this.y *= val;
+        this.z *= val;
+        this.w *= val;
+        return this;
+    }
+
+    applyQuaternion(quat: Quaternion): this {
+        // From https://github.com/mrdoob/three.js
+
+        const x = this.x, y = this.y, z = this.z;
+        const qx = quat.x, qy = quat.y, qz = quat.z, qw = quat.w;
+
+        // calculate quat * vector
+
+        const ix = qw * x + qy * z - qz * y;
+        const iy = qw * y + qz * x - qx * z;
+        const iz = qw * z + qx * y - qy * x;
+        const iw = - qx * x - qy * y - qz * z;
+
+        // calculate result * inverse quat
+
+        this.x = ix * qw + iw * - qx + iy * - qz - iz * - qy;
+        this.y = iy * qw + iw * - qy + iz * - qx - ix * - qz;
+        this.z = iz * qw + iw * - qz + ix * - qy - iy * - qx;
+
+        return this;
+    }
+
+    applyMatrix4(mat: Matrix4): this {
+        const x = this.x, y = this.y, z = this.z, w = this.w;
+        const m = mat.elements;
+
+        this.x = m[0x0] * x + m[0x4] * y + m[0x8] * z + m[0xc] * w;
+        this.y = m[0x1] * x + m[0x5] * y + m[0x9] * z + m[0xd] * w;
+        this.z = m[0x2] * x + m[0x6] * y + m[0xa] * z + m[0xe] * w;
+        this.w = m[0x3] * x + m[0x7] * y + m[0xb] * z + m[0xf] * w;
+
+        return this;
+    }
+}
+
+export class Quaternion implements IVector4 {
+    x: number;
+    y: number;
+    z: number;
+    w: number;
+
+    constructor(x?: number, y?: number, z?: number, w?: number) {
+        this.x = x || 0;
+        this.y = y || 0;
+        this.z = z || 0;
+        this.w = w || 0;
+    }
+
+    copy(quat: Quaternion): this {
+        this.x = quat.x;
+        this.y = quat.y;
+        this.z = quat.z;
+        this.w = quat.w;
+        return this;
+    }
+
+    setIdentity(): this {
+        this.x = 0;
+        this.y = 0;
+        this.z = 0;
+        this.w = 1;
+        return this;
+    }
+
+    setInverse(quat?: Quaternion): this {
+        if (quat === undefined) quat = this;
+
+        this.x = -quat.x;
+        this.y = -quat.y;
+        this.z = -quat.z;
+        this.w = quat.w;
+
+        return this.setNormalized();
+    }
+
+    setNormalized(quat?: Quaternion): this {
+        if (quat === undefined) quat = this;
+
+        const len = Math.sqrt(
+            quat.x * quat.x + quat.y * quat.y +
+            quat.z * quat.z + quat.w * quat.w);
+
+        if (len === 0) {
+            this.x = this.y = this.z = 0;
             this.w = 1;
-            return this;
+        } else {
+            const invLen = 1 / len;
+            this.x = quat.x * invLen;
+            this.y = quat.y * invLen;
+            this.z = quat.z * invLen;
+            this.w = quat.w * invLen;
         }
 
-        setInverse(quat?: Quaternion): this {
-            if (quat === undefined) quat = this;
-
-            this.x = -quat.x;
-            this.y = -quat.y;
-            this.z = -quat.z;
-            this.w = quat.w;
-
-            return this.setNormalized();
-        }
-
-        setNormalized(quat?: Quaternion): this {
-            if (quat === undefined) quat = this;
-
-            const len = Math.sqrt(
-                quat.x * quat.x + quat.y * quat.y +
-                quat.z * quat.z + quat.w * quat.w);
-
-            if (len === 0) {
-                this.x = this.y = this.z = 0;
-                this.w = 1;
-            } else {
-                const invLen = 1 / len;
-                this.x = quat.x * invLen;
-                this.y = quat.y * invLen;
-                this.z = quat.z * invLen;
-                this.w = quat.w * invLen;
-            }
-
-            return this;
-        }
-
-        private static readonly setLookAlong_temp = new Facepunch.Vector3();
-        setLookAlong(normal: IVector3): this {
-            const r = normal.y + 1;
-            const temp = Quaternion.setLookAlong_temp;
-
-            // TODO: check for small r?
-
-            temp.set(0, 1, 0).cross(normal);
-
-            this.x = temp.x;
-            this.y = temp.y;
-            this.z = temp.z;
-            this.w = r;
-
-            return this.setNormalized();
-        }
-
-        setAxisAngle(axis: IVector3, angle: number): this {
-            // From https://github.com/mrdoob/three.js
-
-            const halfAngle = angle * 0.5, s = Math.sin(halfAngle);
-
-            this.x = axis.x * s;
-            this.y = axis.y * s;
-            this.z = axis.z * s;
-            this.w = Math.cos(halfAngle);
-
-            return this;
-        }
-
-        multiply(quat: Quaternion): this {
-            // From https://github.com/mrdoob/three.js
-
-            const qax = this.x, qay = this.y, qaz = this.z, qaw = this.w;
-            const qbx = quat.x, qby = quat.y, qbz = quat.z, qbw = quat.w;
-
-            this.x = qax * qbw + qaw * qbx + qay * qbz - qaz * qby;
-            this.y = qay * qbw + qaw * qby + qaz * qbx - qax * qbz;
-            this.z = qaz * qbw + qaw * qbz + qax * qby - qay * qbx;
-            this.w = qaw * qbw - qax * qbx - qay * qby - qaz * qbz;
-
-            return this;
-        }
-
-        setEuler(euler: Euler): this {
-            // From https://github.com/mrdoob/three.js
-
-            const x = euler.x;
-            const y = euler.y;
-            const z = euler.z;
-            const order = euler.order;
-
-            const cos = Math.cos;
-            const sin = Math.sin;
-
-            const c1 = cos(x * 0.5);
-            const c2 = cos(y * 0.5);
-            const c3 = cos(z * 0.5);
-
-            const s1 = sin(x * 0.5);
-            const s2 = sin(y * 0.5);
-            const s3 = sin(z * 0.5);
-
-            this.x = s1 * c2 * c3 + c1 * s2 * s3 * ((order & 1) !== 0 ? 1 : -1);
-            this.y = c1 * s2 * c3 + s1 * c2 * s3 * ((order & 2) !== 0 ? 1 : -1);
-            this.z = c1 * c2 * s3 + s1 * s2 * c3 * ((order & 4) !== 0 ? 1 : -1);
-            this.w = c1 * c2 * c3 + s1 * s2 * s3 * ((order & 8) !== 0 ? 1 : -1);
-
-            return this;
-        }
+        return this;
     }
 
-    export enum AxisOrder {
-        Xyz = 0x5, // 1010
-        Xzy = 0xc, // 0011
-        Yxz = 0x9, // 1001
-        Yzx = 0x3, // 1100
-        Zxy = 0x6, // 0110
-        Zyx = 0xa  // 0101
+    private static readonly setLookAlong_temp = new Vector3();
+    setLookAlong(normal: IVector3): this {
+        const r = normal.y + 1;
+        const temp = Quaternion.setLookAlong_temp;
+
+        // TODO: check for small r?
+
+        temp.set(0, 1, 0).cross(normal);
+
+        this.x = temp.x;
+        this.y = temp.y;
+        this.z = temp.z;
+        this.w = r;
+
+        return this.setNormalized();
     }
 
-    export class Euler {
-        x: number;
-        y: number;
-        z: number;
-        order: AxisOrder;
+    setAxisAngle(axis: IVector3, angle: number): this {
+        // From https://github.com/mrdoob/three.js
 
-        constructor(x?: number, y?: number, z?: number, order?: AxisOrder) {
-            this.x = x || 0;
-            this.y = y || 0;
-            this.z = z || 0;
-            this.order = order || AxisOrder.Xyz;
-        }
+        const halfAngle = angle * 0.5, s = Math.sin(halfAngle);
+
+        this.x = axis.x * s;
+        this.y = axis.y * s;
+        this.z = axis.z * s;
+        this.w = Math.cos(halfAngle);
+
+        return this;
     }
 
-    export class Plane {
-        normal = new Vector3();
-        distance: number;
+    multiply(quat: Quaternion): this {
+        // From https://github.com/mrdoob/three.js
 
-        constructor(normal: Vector3, distance: number) {
-            this.normal.setNormal(normal);
-            this.distance = distance;
-        }
+        const qax = this.x, qay = this.y, qaz = this.z, qaw = this.w;
+        const qbx = quat.x, qby = quat.y, qbz = quat.z, qbw = quat.w;
+
+        this.x = qax * qbw + qaw * qbx + qay * qbz - qaz * qby;
+        this.y = qay * qbw + qaw * qby + qaz * qbx - qax * qbz;
+        this.z = qaz * qbw + qaw * qbz + qax * qby - qay * qbx;
+        this.w = qaw * qbw - qax * qbx - qay * qby - qaz * qbz;
+
+        return this;
     }
 
-    export class Box3 {
-        min = new Vector3();
-        max = new Vector3();
+    setEuler(euler: Euler): this {
+        // From https://github.com/mrdoob/three.js
 
-        constructor(min?: IVector3, max?: IVector3) {
-            if (min !== undefined) this.min.copy(min);
-            if (max !== undefined) this.max.copy(max);
-        }
+        const x = euler.x;
+        const y = euler.y;
+        const z = euler.z;
+        const order = euler.order;
 
-        copy(box: Box3): this {
-            this.min.copy(box.min);
-            this.max.copy(box.max);
-            return this;
-        }
+        const cos = Math.cos;
+        const sin = Math.sin;
 
-        clampLineSegment(a: IVector3, b: IVector3): boolean {
-            const difX = b.x - a.x;
-            const difY = b.y - a.y;
-            const difZ = b.z - a.z;
+        const c1 = cos(x * 0.5);
+        const c2 = cos(y * 0.5);
+        const c3 = cos(z * 0.5);
 
-            const invX = 1 / difX;
-            const invY = 1 / difY;
-            const invZ = 1 / difZ;
+        const s1 = sin(x * 0.5);
+        const s2 = sin(y * 0.5);
+        const s3 = sin(z * 0.5);
 
-            const tx0 = (this.min.x - a.x) * invX;
-            const tx1 = (this.max.x - a.x) * invX;
-            const ty0 = (this.min.y - a.y) * invY;
-            const ty1 = (this.max.y - a.y) * invY;
-            const tz0 = (this.min.z - a.z) * invZ;
-            const tz1 = (this.max.z - a.z) * invZ;
+        this.x = s1 * c2 * c3 + c1 * s2 * s3 * ((order & 1) !== 0 ? 1 : -1);
+        this.y = c1 * s2 * c3 + s1 * c2 * s3 * ((order & 2) !== 0 ? 1 : -1);
+        this.z = c1 * c2 * s3 + s1 * s2 * c3 * ((order & 4) !== 0 ? 1 : -1);
+        this.w = c1 * c2 * c3 + s1 * s2 * s3 * ((order & 8) !== 0 ? 1 : -1);
 
-            const tMin = Math.max(Math.min(tx0, tx1), Math.min(ty0, ty1), Math.min(tz0, tz1));
-            const tMax = Math.min(Math.max(tx0, tx1), Math.max(ty0, ty1), Math.max(tz0, tz1));
+        return this;
+    }
+}
 
-            a.x += tMin * difX;
-            a.y += tMin * difY;
-            a.z += tMin * difZ;
-            
-            b.x += (tMax - 1) * difX;
-            b.y += (tMax - 1) * difY;
-            b.z += (tMax - 1) * difZ;
+export enum AxisOrder {
+    Xyz = 0x5, // 1010
+    Xzy = 0xc, // 0011
+    Yxz = 0x9, // 1001
+    Yzx = 0x3, // 1100
+    Zxy = 0x6, // 0110
+    Zyx = 0xa  // 0101
+}
 
-            return tMax >= tMin;
-        }
+export class Euler {
+    x: number;
+    y: number;
+    z: number;
+    order: AxisOrder;
 
-        distanceToPoint(vec: IVector3): number {
-            const minX = Math.max(0, this.min.x - vec.x, vec.x - this.max.x);
-            const minY = Math.max(0, this.min.y - vec.y, vec.y - this.max.y);
-            const minZ = Math.max(0, this.min.z - vec.z, vec.z - this.max.z);
-            return Math.sqrt(minX * minX + minY * minY + minZ * minZ);
-        }
+    constructor(x?: number, y?: number, z?: number, order?: AxisOrder) {
+        this.x = x || 0;
+        this.y = y || 0;
+        this.z = z || 0;
+        this.order = order || AxisOrder.Xyz;
+    }
+}
 
-        addPoint(vec: IVector3): void {
-            const min = this.min;
-            const max = this.max;
+export class Plane {
+    normal = new Vector3();
+    distance: number;
 
-            if (vec.x < min.x) min.x = vec.x;
-            if (vec.x > max.x) max.x = vec.x;
+    constructor(normal: Vector3, distance: number) {
+        this.normal.setNormal(normal);
+        this.distance = distance;
+    }
+}
 
-            if (vec.y < min.y) min.y = vec.y;
-            if (vec.y > max.y) max.y = vec.y;
+export class Box3 {
+    min = new Vector3();
+    max = new Vector3();
 
-            if (vec.z < min.z) min.z = vec.z;
-            if (vec.z > max.z) max.z = vec.z;
-        }
+    constructor(min?: IVector3, max?: IVector3) {
+        if (min !== undefined) this.min.copy(min);
+        if (max !== undefined) this.max.copy(max);
     }
 
-    export class Matrix4 {
-        private static nextId = 1;
+    copy(box: Box3): this {
+        this.min.copy(box.min);
+        this.max.copy(box.max);
+        return this;
+    }
 
-        readonly id = Matrix4.nextId++;
+    clampLineSegment(a: IVector3, b: IVector3): boolean {
+        const difX = b.x - a.x;
+        const difY = b.y - a.y;
+        const difZ = b.z - a.z;
 
-        elements: Float32Array = new Float32Array(4 * 4);
+        const invX = 1 / difX;
+        const invY = 1 / difY;
+        const invZ = 1 / difZ;
 
-        setIdentity(): this {
-            const m = this.elements;
-            m[0x0] = 1; m[0x1] = 0; m[0x2] = 0; m[0x3] = 0;
-            m[0x4] = 0; m[0x5] = 1; m[0x6] = 0; m[0x7] = 0;
-            m[0x8] = 0; m[0x9] = 0; m[0xa] = 1; m[0xb] = 0;
-            m[0xc] = 0; m[0xd] = 0; m[0xe] = 0; m[0xf] = 1;
-            return this;
+        const tx0 = (this.min.x - a.x) * invX;
+        const tx1 = (this.max.x - a.x) * invX;
+        const ty0 = (this.min.y - a.y) * invY;
+        const ty1 = (this.max.y - a.y) * invY;
+        const tz0 = (this.min.z - a.z) * invZ;
+        const tz1 = (this.max.z - a.z) * invZ;
+
+        const tMin = Math.max(Math.min(tx0, tx1), Math.min(ty0, ty1), Math.min(tz0, tz1));
+        const tMax = Math.min(Math.max(tx0, tx1), Math.max(ty0, ty1), Math.max(tz0, tz1));
+
+        a.x += tMin * difX;
+        a.y += tMin * difY;
+        a.z += tMin * difZ;
+        
+        b.x += (tMax - 1) * difX;
+        b.y += (tMax - 1) * difY;
+        b.z += (tMax - 1) * difZ;
+
+        return tMax >= tMin;
+    }
+
+    distanceToPoint(vec: IVector3): number {
+        const minX = Math.max(0, this.min.x - vec.x, vec.x - this.max.x);
+        const minY = Math.max(0, this.min.y - vec.y, vec.y - this.max.y);
+        const minZ = Math.max(0, this.min.z - vec.z, vec.z - this.max.z);
+        return Math.sqrt(minX * minX + minY * minY + minZ * minZ);
+    }
+
+    addPoint(vec: IVector3): void {
+        const min = this.min;
+        const max = this.max;
+
+        if (vec.x < min.x) min.x = vec.x;
+        if (vec.x > max.x) max.x = vec.x;
+
+        if (vec.y < min.y) min.y = vec.y;
+        if (vec.y > max.y) max.y = vec.y;
+
+        if (vec.z < min.z) min.z = vec.z;
+        if (vec.z > max.z) max.z = vec.z;
+    }
+}
+
+export class Matrix4 {
+    private static nextId = 1;
+
+    readonly id = Matrix4.nextId++;
+
+    elements: Float32Array = new Float32Array(4 * 4);
+
+    setIdentity(): this {
+        const m = this.elements;
+        m[0x0] = 1; m[0x1] = 0; m[0x2] = 0; m[0x3] = 0;
+        m[0x4] = 0; m[0x5] = 1; m[0x6] = 0; m[0x7] = 0;
+        m[0x8] = 0; m[0x9] = 0; m[0xa] = 1; m[0xb] = 0;
+        m[0xc] = 0; m[0xd] = 0; m[0xe] = 0; m[0xf] = 1;
+        return this;
+    }
+
+    compareTo(other: Matrix4): number {
+        const m = this.elements;
+        const n = other.elements;
+
+        for (let i = 0xf; i >= 0; --i) {
+            if (m[i] !== n[i]) return m[i] - n[i];
         }
 
-        compareTo(other: Matrix4): number {
-            const m = this.elements;
-            const n = other.elements;
+        return 0;
+    }
 
-            for (let i = 0xf; i >= 0; --i) {
-                if (m[i] !== n[i]) return m[i] - n[i];
-            }
+    copy(mat: Matrix4): this {
+        const m = this.elements;
+        const n = mat.elements;
 
-            return 0;
-        }
+        for (let i = 0; i < 16; ++i) m[i] = n[i];
 
-        copy(mat: Matrix4): this {
-            const m = this.elements;
-            const n = mat.elements;
+        return this;
+    }
 
-            for (let i = 0; i < 16; ++i) m[i] = n[i];
+    setRotation(rotation: Quaternion): this {
+        const m = this.elements;
 
-            return this;
-        }
+        // From https://github.com/mrdoob/three.js
 
-        setRotation(rotation: Quaternion): this {
-            const m = this.elements;
+        const x = rotation.x, y = rotation.y, z = rotation.z, w = rotation.w;
+        const x2 = x + x, y2 = y + y, z2 = z + z;
+        const xx = x * x2, xy = x * y2, xz = x * z2;
+        const yy = y * y2, yz = y * z2, zz = z * z2;
+        const wx = w * x2, wy = w * y2, wz = w * z2;
 
-            // From https://github.com/mrdoob/three.js
+        m[0] = 1 - (yy + zz);
+        m[4] = xy - wz;
+        m[8] = xz + wy;
 
-            const x = rotation.x, y = rotation.y, z = rotation.z, w = rotation.w;
-            const x2 = x + x, y2 = y + y, z2 = z + z;
-            const xx = x * x2, xy = x * y2, xz = x * z2;
-            const yy = y * y2, yz = y * z2, zz = z * z2;
-            const wx = w * x2, wy = w * y2, wz = w * z2;
+        m[1] = xy + wz;
+        m[5] = 1 - (xx + zz);
+        m[9] = yz - wx;
 
-            m[0] = 1 - (yy + zz);
-            m[4] = xy - wz;
-            m[8] = xz + wy;
+        m[2] = xz - wy;
+        m[6] = yz + wx;
+        m[10] = 1 - (xx + yy);
 
-            m[1] = xy + wz;
-            m[5] = 1 - (xx + zz);
-            m[9] = yz - wx;
+        m[3] = 0;
+        m[7] = 0;
+        m[11] = 0;
 
-            m[2] = xz - wy;
-            m[6] = yz + wx;
-            m[10] = 1 - (xx + yy);
+        m[12] = 0;
+        m[13] = 0;
+        m[14] = 0;
+        m[15] = 1;
 
-            m[3] = 0;
-            m[7] = 0;
-            m[11] = 0;
+        return this;
+    }
 
-            m[12] = 0;
-            m[13] = 0;
-            m[14] = 0;
-            m[15] = 1;
+    scale(vec: Vector3): this {
+        const m = this.elements;
+        const x = vec.x, y = vec.y, z = vec.z;
 
-            return this;
-        }
+        m[0x0] *= x; m[0x1] *= x; m[0x2] *= x; m[0x3] *= x;
+        m[0x4] *= y; m[0x5] *= y; m[0x6] *= y; m[0x7] *= y;
+        m[0x8] *= z; m[0x9] *= z; m[0xa] *= z; m[0xb] *= z;
 
-        scale(vec: Vector3): this {
-            const m = this.elements;
-            const x = vec.x, y = vec.y, z = vec.z;
+        return this;
+    }
 
-            m[0x0] *= x; m[0x1] *= x; m[0x2] *= x; m[0x3] *= x;
-            m[0x4] *= y; m[0x5] *= y; m[0x6] *= y; m[0x7] *= y;
-            m[0x8] *= z; m[0x9] *= z; m[0xa] *= z; m[0xb] *= z;
+    translate(vec: Vector3): this {
+        const m = this.elements;
 
-            return this;
-        }
+        m[0xc] += vec.x;
+        m[0xd] += vec.y;
+        m[0xe] += vec.z;
 
-        translate(vec: Vector3): this {
-            const m = this.elements;
+        return this;
+    }
 
-            m[0xc] += vec.x;
-            m[0xd] += vec.y;
-            m[0xe] += vec.z;
+    setPerspective(fov: number, aspect: number, near: number, far: number): this {
+        const top = near * Math.tan(0.5 * fov),
+            height = 2 * top,
+            width = aspect * height,
+            left = - 0.5 * width,
+            right = left + width,
+            bottom = -top;
 
-            return this;
-        }
+        // From https://github.com/mrdoob/three.js
 
-        setPerspective(fov: number, aspect: number, near: number, far: number): this {
-            const top = near * Math.tan(0.5 * fov),
-                height = 2 * top,
-                width = aspect * height,
-                left = - 0.5 * width,
-                right = left + width,
-                bottom = -top;
+        const m = this.elements;
+        const x = 2 * near / width;
+        const y = 2 * near / height;
 
-            // From https://github.com/mrdoob/three.js
+        const a = (right + left) / (right - left);
+        const b = (top + bottom) / (top - bottom);
+        const c = - (far + near) / (far - near);
+        const d = - 2 * far * near / (far - near);
 
-            const m = this.elements;
-            const x = 2 * near / width;
-            const y = 2 * near / height;
+        m[0x0] = x; m[0x4] = 0; m[0x8] = a;  m[0xc] = 0;
+        m[0x1] = 0; m[0x5] = y; m[0x9] = b;  m[0xd] = 0;
+        m[0x2] = 0; m[0x6] = 0; m[0xa] = c;  m[0xe] = d;
+        m[0x3] = 0; m[0x7] = 0; m[0xb] = -1; m[0xf] = 0;
 
-            const a = (right + left) / (right - left);
-            const b = (top + bottom) / (top - bottom);
-            const c = - (far + near) / (far - near);
-            const d = - 2 * far * near / (far - near);
+        return this;
+    }
 
-            m[0x0] = x; m[0x4] = 0; m[0x8] = a;  m[0xc] = 0;
-            m[0x1] = 0; m[0x5] = y; m[0x9] = b;  m[0xd] = 0;
-            m[0x2] = 0; m[0x6] = 0; m[0xa] = c;  m[0xe] = d;
-            m[0x3] = 0; m[0x7] = 0; m[0xb] = -1; m[0xf] = 0;
+    setOrthographic(size: number, aspect: number, near: number, far: number): this {
+        const width = size * aspect;
 
-            return this;
-        }
+        const m = this.elements;
+        const x = 2 / width;
+        const y = 2 / size;
+        const z = 2 / (far - near);
 
-        setOrthographic(size: number, aspect: number, near: number, far: number): this {
-            const width = size * aspect;
+        const a = (far + near) * z * -0.5;
 
-            const m = this.elements;
-            const x = 2 / width;
-            const y = 2 / size;
-            const z = 2 / (far - near);
+        m[0x0] = x; m[0x4] = 0; m[0x8] = 0; m[0xc] = 0;
+        m[0x1] = 0; m[0x5] = y; m[0x9] = 0; m[0xd] = 0;
+        m[0x2] = 0; m[0x6] = 0; m[0xa] = z; m[0xe] = a;
+        m[0x3] = 0; m[0x7] = 0; m[0xb] = 0; m[0xf] = 1;
 
-            const a = (far + near) * z * -0.5;
+        return this;
+    }
 
-            m[0x0] = x; m[0x4] = 0; m[0x8] = 0; m[0xc] = 0;
-            m[0x1] = 0; m[0x5] = y; m[0x9] = 0; m[0xd] = 0;
-            m[0x2] = 0; m[0x6] = 0; m[0xa] = z; m[0xe] = a;
-            m[0x3] = 0; m[0x7] = 0; m[0xb] = 0; m[0xf] = 1;
+    setInverse(from: Matrix4): this {
+        const m = from.elements;
+        const inv = this.elements;
 
-            return this;
-        }
+        // From http://stackoverflow.com/a/1148405
 
-        setInverse(from: Matrix4): this {
-            const m = from.elements;
-            const inv = this.elements;
+        inv[0] = m[5] * m[10] * m[15] -
+            m[5] * m[11] * m[14] -
+            m[9] * m[6] * m[15] +
+            m[9] * m[7] * m[14] +
+            m[13] * m[6] * m[11] -
+            m[13] * m[7] * m[10];
 
-            // From http://stackoverflow.com/a/1148405
+        inv[4] = -m[4] * m[10] * m[15] +
+            m[4] * m[11] * m[14] +
+            m[8] * m[6] * m[15] -
+            m[8] * m[7] * m[14] -
+            m[12] * m[6] * m[11] +
+            m[12] * m[7] * m[10];
 
-            inv[0] = m[5] * m[10] * m[15] -
-                m[5] * m[11] * m[14] -
-                m[9] * m[6] * m[15] +
-                m[9] * m[7] * m[14] +
-                m[13] * m[6] * m[11] -
-                m[13] * m[7] * m[10];
+        inv[8] = m[4] * m[9] * m[15] -
+            m[4] * m[11] * m[13] -
+            m[8] * m[5] * m[15] +
+            m[8] * m[7] * m[13] +
+            m[12] * m[5] * m[11] -
+            m[12] * m[7] * m[9];
 
-            inv[4] = -m[4] * m[10] * m[15] +
-                m[4] * m[11] * m[14] +
-                m[8] * m[6] * m[15] -
-                m[8] * m[7] * m[14] -
-                m[12] * m[6] * m[11] +
-                m[12] * m[7] * m[10];
+        inv[12] = -m[4] * m[9] * m[14] +
+            m[4] * m[10] * m[13] +
+            m[8] * m[5] * m[14] -
+            m[8] * m[6] * m[13] -
+            m[12] * m[5] * m[10] +
+            m[12] * m[6] * m[9];
 
-            inv[8] = m[4] * m[9] * m[15] -
-                m[4] * m[11] * m[13] -
-                m[8] * m[5] * m[15] +
-                m[8] * m[7] * m[13] +
-                m[12] * m[5] * m[11] -
-                m[12] * m[7] * m[9];
+        inv[1] = -m[1] * m[10] * m[15] +
+            m[1] * m[11] * m[14] +
+            m[9] * m[2] * m[15] -
+            m[9] * m[3] * m[14] -
+            m[13] * m[2] * m[11] +
+            m[13] * m[3] * m[10];
 
-            inv[12] = -m[4] * m[9] * m[14] +
-                m[4] * m[10] * m[13] +
-                m[8] * m[5] * m[14] -
-                m[8] * m[6] * m[13] -
-                m[12] * m[5] * m[10] +
-                m[12] * m[6] * m[9];
+        inv[5] = m[0] * m[10] * m[15] -
+            m[0] * m[11] * m[14] -
+            m[8] * m[2] * m[15] +
+            m[8] * m[3] * m[14] +
+            m[12] * m[2] * m[11] -
+            m[12] * m[3] * m[10];
 
-            inv[1] = -m[1] * m[10] * m[15] +
-                m[1] * m[11] * m[14] +
-                m[9] * m[2] * m[15] -
-                m[9] * m[3] * m[14] -
-                m[13] * m[2] * m[11] +
-                m[13] * m[3] * m[10];
+        inv[9] = -m[0] * m[9] * m[15] +
+            m[0] * m[11] * m[13] +
+            m[8] * m[1] * m[15] -
+            m[8] * m[3] * m[13] -
+            m[12] * m[1] * m[11] +
+            m[12] * m[3] * m[9];
 
-            inv[5] = m[0] * m[10] * m[15] -
-                m[0] * m[11] * m[14] -
-                m[8] * m[2] * m[15] +
-                m[8] * m[3] * m[14] +
-                m[12] * m[2] * m[11] -
-                m[12] * m[3] * m[10];
+        inv[13] = m[0] * m[9] * m[14] -
+            m[0] * m[10] * m[13] -
+            m[8] * m[1] * m[14] +
+            m[8] * m[2] * m[13] +
+            m[12] * m[1] * m[10] -
+            m[12] * m[2] * m[9];
 
-            inv[9] = -m[0] * m[9] * m[15] +
-                m[0] * m[11] * m[13] +
-                m[8] * m[1] * m[15] -
-                m[8] * m[3] * m[13] -
-                m[12] * m[1] * m[11] +
-                m[12] * m[3] * m[9];
+        inv[2] = m[1] * m[6] * m[15] -
+            m[1] * m[7] * m[14] -
+            m[5] * m[2] * m[15] +
+            m[5] * m[3] * m[14] +
+            m[13] * m[2] * m[7] -
+            m[13] * m[3] * m[6];
 
-            inv[13] = m[0] * m[9] * m[14] -
-                m[0] * m[10] * m[13] -
-                m[8] * m[1] * m[14] +
-                m[8] * m[2] * m[13] +
-                m[12] * m[1] * m[10] -
-                m[12] * m[2] * m[9];
+        inv[6] = -m[0] * m[6] * m[15] +
+            m[0] * m[7] * m[14] +
+            m[4] * m[2] * m[15] -
+            m[4] * m[3] * m[14] -
+            m[12] * m[2] * m[7] +
+            m[12] * m[3] * m[6];
 
-            inv[2] = m[1] * m[6] * m[15] -
-                m[1] * m[7] * m[14] -
-                m[5] * m[2] * m[15] +
-                m[5] * m[3] * m[14] +
-                m[13] * m[2] * m[7] -
-                m[13] * m[3] * m[6];
+        inv[10] = m[0] * m[5] * m[15] -
+            m[0] * m[7] * m[13] -
+            m[4] * m[1] * m[15] +
+            m[4] * m[3] * m[13] +
+            m[12] * m[1] * m[7] -
+            m[12] * m[3] * m[5];
 
-            inv[6] = -m[0] * m[6] * m[15] +
-                m[0] * m[7] * m[14] +
-                m[4] * m[2] * m[15] -
-                m[4] * m[3] * m[14] -
-                m[12] * m[2] * m[7] +
-                m[12] * m[3] * m[6];
+        inv[14] = -m[0] * m[5] * m[14] +
+            m[0] * m[6] * m[13] +
+            m[4] * m[1] * m[14] -
+            m[4] * m[2] * m[13] -
+            m[12] * m[1] * m[6] +
+            m[12] * m[2] * m[5];
 
-            inv[10] = m[0] * m[5] * m[15] -
-                m[0] * m[7] * m[13] -
-                m[4] * m[1] * m[15] +
-                m[4] * m[3] * m[13] +
-                m[12] * m[1] * m[7] -
-                m[12] * m[3] * m[5];
+        inv[3] = -m[1] * m[6] * m[11] +
+            m[1] * m[7] * m[10] +
+            m[5] * m[2] * m[11] -
+            m[5] * m[3] * m[10] -
+            m[9] * m[2] * m[7] +
+            m[9] * m[3] * m[6];
 
-            inv[14] = -m[0] * m[5] * m[14] +
-                m[0] * m[6] * m[13] +
-                m[4] * m[1] * m[14] -
-                m[4] * m[2] * m[13] -
-                m[12] * m[1] * m[6] +
-                m[12] * m[2] * m[5];
+        inv[7] = m[0] * m[6] * m[11] -
+            m[0] * m[7] * m[10] -
+            m[4] * m[2] * m[11] +
+            m[4] * m[3] * m[10] +
+            m[8] * m[2] * m[7] -
+            m[8] * m[3] * m[6];
 
-            inv[3] = -m[1] * m[6] * m[11] +
-                m[1] * m[7] * m[10] +
-                m[5] * m[2] * m[11] -
-                m[5] * m[3] * m[10] -
-                m[9] * m[2] * m[7] +
-                m[9] * m[3] * m[6];
+        inv[11] = -m[0] * m[5] * m[11] +
+            m[0] * m[7] * m[9] +
+            m[4] * m[1] * m[11] -
+            m[4] * m[3] * m[9] -
+            m[8] * m[1] * m[7] +
+            m[8] * m[3] * m[5];
 
-            inv[7] = m[0] * m[6] * m[11] -
-                m[0] * m[7] * m[10] -
-                m[4] * m[2] * m[11] +
-                m[4] * m[3] * m[10] +
-                m[8] * m[2] * m[7] -
-                m[8] * m[3] * m[6];
+        inv[15] = m[0] * m[5] * m[10] -
+            m[0] * m[6] * m[9] -
+            m[4] * m[1] * m[10] +
+            m[4] * m[2] * m[9] +
+            m[8] * m[1] * m[6] -
+            m[8] * m[2] * m[5];
 
-            inv[11] = -m[0] * m[5] * m[11] +
-                m[0] * m[7] * m[9] +
-                m[4] * m[1] * m[11] -
-                m[4] * m[3] * m[9] -
-                m[8] * m[1] * m[7] +
-                m[8] * m[3] * m[5];
+        let det = m[0] * inv[0] + m[1] * inv[4] + m[2] * inv[8] + m[3] * inv[12];
 
-            inv[15] = m[0] * m[5] * m[10] -
-                m[0] * m[6] * m[9] -
-                m[4] * m[1] * m[10] +
-                m[4] * m[2] * m[9] +
-                m[8] * m[1] * m[6] -
-                m[8] * m[2] * m[5];
+        if (det === 0) throw new Error("Matrix is not invertible.");
 
-            let det = m[0] * inv[0] + m[1] * inv[4] + m[2] * inv[8] + m[3] * inv[12];
+        det = 1.0 / det;
 
-            if (det === 0) throw new Error("Matrix is not invertible.");
-
-            det = 1.0 / det;
-
-            for (let i = 0; i < 16; ++i) inv[i] *= det;
-            return this;
-        }
+        for (let i = 0; i < 16; ++i) inv[i] *= det;
+        return this;
     }
 }

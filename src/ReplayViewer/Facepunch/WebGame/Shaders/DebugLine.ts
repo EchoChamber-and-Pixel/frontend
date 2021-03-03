@@ -1,110 +1,107 @@
-namespace Facepunch {
-    export namespace WebGame {
-        export namespace Shaders {
-            export class DebugLineProps extends BaseMaterialProps {
-                noCull = true;
-                color0 = new Vector3(1.0, 1.0, 1.0);
-                color1 = new Vector3(1.0, 1.0, 1.0);
-                phase = 0;
-                frequency = 1;
-            }
+import { BaseMaterialProps, BaseShaderProgram, UniformMatrix4, Uniform4F, Uniform3F, Uniform1F, VertexAttribute, CommandBuffer, Camera, Game } from "..";
+import { Vector3 } from "../..";
 
-            export class DebugLine extends BaseShaderProgram<DebugLineProps> {
-                readonly projectionMatrix: UniformMatrix4;
-                readonly viewMatrix: UniformMatrix4;
-                readonly modelMatrix: UniformMatrix4;
+export class DebugLineProps extends BaseMaterialProps {
+    noCull = true;
+    color0 = new Vector3(1.0, 1.0, 1.0);
+    color1 = new Vector3(1.0, 1.0, 1.0);
+    phase = 0;
+    frequency = 1;
+}
 
-                readonly time: Uniform4F;
-                readonly color0: Uniform3F;
-                readonly color1: Uniform3F;
-                readonly phase: Uniform1F;
-                readonly frequency: Uniform1F;
+export class DebugLine extends BaseShaderProgram<DebugLineProps> {
+    readonly projectionMatrix: UniformMatrix4;
+    readonly viewMatrix: UniformMatrix4;
+    readonly modelMatrix: UniformMatrix4;
 
-                constructor(context: WebGLRenderingContext) {
-                    super(context, DebugLineProps);
+    readonly time: Uniform4F;
+    readonly color0: Uniform3F;
+    readonly color1: Uniform3F;
+    readonly phase: Uniform1F;
+    readonly frequency: Uniform1F;
 
-                    const gl = context;
+    constructor(context: WebGLRenderingContext) {
+        super(context, DebugLineProps);
 
-                    this.includeShaderSource(gl.VERTEX_SHADER, `
-                        attribute vec3 aPosition;
-                        attribute float aProgress;
+        const gl = context;
 
-                        varying float vProgress;
+        this.includeShaderSource(gl.VERTEX_SHADER, `
+            attribute vec3 aPosition;
+            attribute float aProgress;
 
-                        uniform mat4 uProjection;
-                        uniform mat4 uView;
-                        uniform mat4 uModel;
+            varying float vProgress;
 
-                        void main()
-                        {
-                            vProgress = aProgress;
+            uniform mat4 uProjection;
+            uniform mat4 uView;
+            uniform mat4 uModel;
 
-                            gl_Position = uProjection * uView * uModel * vec4(aPosition, 1.0);
-                        }`);
+            void main()
+            {
+                vProgress = aProgress;
 
-                    this.includeShaderSource(gl.FRAGMENT_SHADER, `
-                        precision mediump float;
+                gl_Position = uProjection * uView * uModel * vec4(aPosition, 1.0);
+            }`);
 
-                        varying float vProgress;
+        this.includeShaderSource(gl.FRAGMENT_SHADER, `
+            precision mediump float;
 
-                        uniform vec4 uTime;
-                        uniform vec3 uColor0;
-                        uniform vec3 uColor1;
-                        uniform float uPhase;
-                        uniform float uFrequency;
+            varying float vProgress;
 
-                        void main()
-                        {
-                            gl_FragColor = vec4(mod(vProgress - uPhase - uTime.x * uFrequency, 2.0) < 1.0 ? uColor0 : uColor1, 1.0);
-                        }`);
+            uniform vec4 uTime;
+            uniform vec3 uColor0;
+            uniform vec3 uColor1;
+            uniform float uPhase;
+            uniform float uFrequency;
 
-                    this.addAttribute("aPosition", VertexAttribute.position);
-                    this.addAttribute("aProgress", VertexAttribute.alpha);
+            void main()
+            {
+                gl_FragColor = vec4(mod(vProgress - uPhase - uTime.x * uFrequency, 2.0) < 1.0 ? uColor0 : uColor1, 1.0);
+            }`);
 
-                    this.projectionMatrix = this.addUniform("uProjection", UniformMatrix4);
-                    this.viewMatrix = this.addUniform("uView", UniformMatrix4);
-                    this.modelMatrix = this.addUniform("uModel", UniformMatrix4);
+        this.addAttribute("aPosition", VertexAttribute.position);
+        this.addAttribute("aProgress", VertexAttribute.alpha);
 
-                    this.time = this.addUniform("uTime", Uniform4F);
-                    this.color0 = this.addUniform("uColor0", Uniform3F);
-                    this.color1 = this.addUniform("uColor1", Uniform3F);
-                    this.phase = this.addUniform("uPhase", Uniform1F);
-                    this.frequency = this.addUniform("uFrequency", Uniform1F);
+        this.projectionMatrix = this.addUniform("uProjection", UniformMatrix4);
+        this.viewMatrix = this.addUniform("uView", UniformMatrix4);
+        this.modelMatrix = this.addUniform("uModel", UniformMatrix4);
 
-                    this.compile();
-                }
+        this.time = this.addUniform("uTime", Uniform4F);
+        this.color0 = this.addUniform("uColor0", Uniform3F);
+        this.color1 = this.addUniform("uColor1", Uniform3F);
+        this.phase = this.addUniform("uPhase", Uniform1F);
+        this.frequency = this.addUniform("uFrequency", Uniform1F);
 
-                bufferSetup(buf: CommandBuffer): void {
-                    super.bufferSetup(buf);
+        this.compile();
+    }
 
-                    this.projectionMatrix.bufferParameter(buf, Camera.projectionMatrixParam);
-                    this.viewMatrix.bufferParameter(buf, Camera.viewMatrixParam);
-                    this.time.bufferParameter(buf, Game.timeInfoParam);
+    bufferSetup(buf: CommandBuffer): void {
+        super.bufferSetup(buf);
 
-                    const gl = this.context;
+        this.projectionMatrix.bufferParameter(buf, Camera.projectionMatrixParam);
+        this.viewMatrix.bufferParameter(buf, Camera.viewMatrixParam);
+        this.time.bufferParameter(buf, Game.timeInfoParam);
 
-                    buf.enable(gl.DEPTH_TEST);
-                    buf.depthMask(true);
-                    buf.disable(gl.BLEND);
-                }
+        const gl = this.context;
 
-                bufferModelMatrix(buf: CommandBuffer, value: Float32Array): void {
-                    super.bufferModelMatrix(buf, value);
+        buf.enable(gl.DEPTH_TEST);
+        buf.depthMask(true);
+        buf.disable(gl.BLEND);
+    }
 
-                    this.modelMatrix.bufferValue(buf, false, value);
-                }
+    bufferModelMatrix(buf: CommandBuffer, value: Float32Array): void {
+        super.bufferModelMatrix(buf, value);
 
-                bufferMaterialProps(buf: CommandBuffer, props: DebugLineProps): void {
-                    super.bufferMaterialProps(buf, props);
+        this.modelMatrix.bufferValue(buf, false, value);
+    }
 
-                    const gl = this.context;
+    bufferMaterialProps(buf: CommandBuffer, props: DebugLineProps): void {
+        super.bufferMaterialProps(buf, props);
 
-                    this.color0.bufferValue(buf, props.color0.x, props.color0.y, props.color0.z);
-                    this.color1.bufferValue(buf, props.color1.x, props.color1.y, props.color1.z);
-                    this.phase.bufferValue(buf, props.phase);
-                    this.frequency.bufferValue(buf, props.frequency);
-                }
-            }
-        }
+        const gl = this.context;
+
+        this.color0.bufferValue(buf, props.color0.x, props.color0.y, props.color0.z);
+        this.color1.bufferValue(buf, props.color1.x, props.color1.y, props.color1.z);
+        this.phase.bufferValue(buf, props.phase);
+        this.frequency.bufferValue(buf, props.frequency);
     }
 }

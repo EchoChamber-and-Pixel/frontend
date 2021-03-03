@@ -1,67 +1,64 @@
-namespace Facepunch {
-    export namespace WebGame {
-        export namespace Shaders {
-            export class VertexLitGenericMaterialProps extends ModelBaseMaterialProps {
-                alpha = 1.0;
-                alphaTest = false;
-            }
+import { ModelBaseMaterialProps, ModelBase } from ".";
+import { Uniform1F, VertexAttribute, CommandBuffer } from "..";
 
-            export class VertexLitGeneric extends ModelBase<VertexLitGenericMaterialProps> {
-                readonly alpha: Uniform1F;
-                readonly alphaTest: Uniform1F;
-                readonly translucent: Uniform1F;
+export class VertexLitGenericMaterialProps extends ModelBaseMaterialProps {
+    alpha = 1.0;
+    alphaTest = false;
+}
 
-                constructor(context: WebGLRenderingContext) {
-                    super(context, VertexLitGenericMaterialProps);
+export class VertexLitGeneric extends ModelBase<VertexLitGenericMaterialProps> {
+    readonly alpha: Uniform1F;
+    readonly alphaTest: Uniform1F;
+    readonly translucent: Uniform1F;
 
-                    const gl = context;
+    constructor(context: WebGLRenderingContext) {
+        super(context, VertexLitGenericMaterialProps);
 
-                    this.addAttribute("aColor", VertexAttribute.rgb);
+        const gl = context;
 
-                    this.includeShaderSource(gl.VERTEX_SHADER, `
-                        attribute vec3 aColor;
+        this.addAttribute("aColor", VertexAttribute.rgb);
 
-                        varying vec3 vColor;
+        this.includeShaderSource(gl.VERTEX_SHADER, `
+            attribute vec3 aColor;
 
-                        void main()
-                        {
-                            Base_main();
-                            vColor = aColor * (1.0 / 255.0);
-                        }`);
+            varying vec3 vColor;
 
-                    this.includeShaderSource(gl.FRAGMENT_SHADER, `
-                        varying vec3 vColor;
+            void main()
+            {
+                Base_main();
+                vColor = aColor * (1.0 / 255.0);
+            }`);
 
-                        uniform float uAlpha;
+        this.includeShaderSource(gl.FRAGMENT_SHADER, `
+            varying vec3 vColor;
 
-                        uniform float uAlphaTest;
-                        uniform float uTranslucent;
+            uniform float uAlpha;
 
-                        void main()
-                        {
-                            vec4 texSample = texture2D(uBaseTexture, vTextureCoord);
-                            if (texSample.a < uAlphaTest - 0.5) discard;
+            uniform float uAlphaTest;
+            uniform float uTranslucent;
 
-                            vec3 color = ApplyFog(texSample.rgb * vColor);
+            void main()
+            {
+                vec4 texSample = texture2D(uBaseTexture, vTextureCoord);
+                if (texSample.a < uAlphaTest - 0.5) discard;
 
-                            gl_FragColor = vec4(color, mix(1.0, texSample.a, uTranslucent) * uAlpha);
-                        }`);
+                vec3 color = ApplyFog(texSample.rgb * vColor);
 
-                    this.alpha = this.addUniform("uAlpha", Uniform1F);
-                    this.alphaTest = this.addUniform("uAlphaTest", Uniform1F);
-                    this.translucent = this.addUniform("uTranslucent", Uniform1F);
-                
-                    this.compile();
-                }
+                gl_FragColor = vec4(color, mix(1.0, texSample.a, uTranslucent) * uAlpha);
+            }`);
 
-                bufferMaterialProps(buf: CommandBuffer, props: VertexLitGenericMaterialProps): void {
-                    super.bufferMaterialProps(buf, props);
+        this.alpha = this.addUniform("uAlpha", Uniform1F);
+        this.alphaTest = this.addUniform("uAlphaTest", Uniform1F);
+        this.translucent = this.addUniform("uTranslucent", Uniform1F);
+    
+        this.compile();
+    }
 
-                    this.alpha.bufferValue(buf, props.alpha);
-                    this.alphaTest.bufferValue(buf, props.alphaTest ? 1 : 0);
-                    this.translucent.bufferValue(buf, props.translucent ? 1 : 0);
-                }
-            }
-        }
+    bufferMaterialProps(buf: CommandBuffer, props: VertexLitGenericMaterialProps): void {
+        super.bufferMaterialProps(buf, props);
+
+        this.alpha.bufferValue(buf, props.alpha);
+        this.alphaTest.bufferValue(buf, props.alphaTest ? 1 : 0);
+        this.translucent.bufferValue(buf, props.translucent ? 1 : 0);
     }
 }

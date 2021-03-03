@@ -1,74 +1,72 @@
-namespace Facepunch {
-    export namespace WebGame {
-        export class ShaderManager {
-            private namedPrograms: { [name: string]: ShaderProgram } = {};
-            private ctorPrograms: {ctor: IProgramCtor, program: ShaderProgram}[] = [];
+import { ShaderProgram, IProgramCtor, Material } from ".";
 
-            readonly context: WebGLRenderingContext;
+export class ShaderManager {
+    private namedPrograms: { [name: string]: ShaderProgram | null } = {};
+    private ctorPrograms: {ctor: IProgramCtor, program: ShaderProgram}[] = [];
 
-            constructor(context: WebGLRenderingContext) {
-                this.context = context;
-            }
+    readonly context: WebGLRenderingContext;
 
-            resetUniformCache(): void {
-                for (let i = 0, iEnd = this.ctorPrograms.length; i < iEnd; ++i) {
-                    this.ctorPrograms[i].program.resetUniformCache();
-                }
-            }
+    constructor(context: WebGLRenderingContext) {
+        this.context = context;
+    }
 
-            private getFromName(name: string): ShaderProgram {
-                const program = this.namedPrograms[name];
-                if (program !== undefined) return program;
+    resetUniformCache(): void {
+        for (let i = 0, iEnd = this.ctorPrograms.length; i < iEnd; ++i) {
+            this.ctorPrograms[i].program.resetUniformCache();
+        }
+    }
 
-                const nameParts = name.split(".");
-                
-                let target: any = window;
-                for (let i = 0; i < nameParts.length; ++i) {
-                    target = target[nameParts[i]];
-                }
+    private getFromName(name: string): ShaderProgram | null {
+        const program = this.namedPrograms[name];
+        if (program !== undefined) return program;
 
-                const Type: IProgramCtor = target;
-                if (Type === undefined) {
-                    console.warn(`Unknown shader name '${name}'.`);
-                    return this.namedPrograms[name] = null;
-                }
-                return this.namedPrograms[name] = this.getFromCtor(Type);
-            }
+        const nameParts = name.split(".");
+        
+        let target: any = window;
+        for (let i = 0; i < nameParts.length; ++i) {
+            target = target[nameParts[i]];
+        }
 
-            private getFromCtor(ctor: IProgramCtor): ShaderProgram {
-                for (let i = 0, iEnd = this.ctorPrograms.length; i < iEnd; ++i) {
-                    const ctorProgram = this.ctorPrograms[i];
-                    if (ctorProgram.ctor === ctor) return ctorProgram.program;
-                }
+        const Type: IProgramCtor = target;
+        if (Type === undefined) {
+            console.warn(`Unknown shader name '${name}'.`);
+            return this.namedPrograms[name] = null;
+        }
+        return this.namedPrograms[name] = this.getFromCtor(Type);
+    }
 
-                const program = new ctor(this.context);
-                this.ctorPrograms.push({ctor: ctor, program: program});
-                return program;
-            }
+    private getFromCtor(ctor: IProgramCtor): ShaderProgram {
+        for (let i = 0, iEnd = this.ctorPrograms.length; i < iEnd; ++i) {
+            const ctorProgram = this.ctorPrograms[i];
+            if (ctorProgram.ctor === ctor) return ctorProgram.program;
+        }
 
-            get(name: string): ShaderProgram;
-            get(ctor: IProgramCtor): ShaderProgram;
-            get(nameOrCtor: string | IProgramCtor): ShaderProgram {
-                if (typeof nameOrCtor === "string") {
-                    return this.getFromName(nameOrCtor as string);
-                } else {
-                    return this.getFromCtor(nameOrCtor as IProgramCtor);
-                }
-            }
+        const program = new ctor(this.context);
+        this.ctorPrograms.push({ctor: ctor, program: program});
+        return program;
+    }
 
-            createMaterial(ctor: IProgramCtor, isDynamic: boolean): Material {
-                return new Material(this.getFromCtor(ctor), isDynamic);
-            }
+    get(name: string): ShaderProgram;
+    get(ctor: IProgramCtor): ShaderProgram;
+    get(nameOrCtor: string | IProgramCtor): ShaderProgram {
+        if (typeof nameOrCtor === "string") {
+            return this.getFromName(nameOrCtor as string) as ShaderProgram;
+        } else {
+            return this.getFromCtor(nameOrCtor as IProgramCtor);
+        }
+    }
 
-            dispose(): void {
-                for (let name in this.namedPrograms) {
-                    if (this.namedPrograms.hasOwnProperty(name)) {
-                        this.namedPrograms[name].dispose();
-                    }
-                }
+    createMaterial(ctor: IProgramCtor, isDynamic: boolean): Material {
+        return new Material(this.getFromCtor(ctor), isDynamic);
+    }
 
-                this.namedPrograms = {};
+    dispose(): void {
+        for (let name in this.namedPrograms) {
+            if (this.namedPrograms.hasOwnProperty(name)) {
+                this.namedPrograms[name]!.dispose();
             }
         }
+
+        this.namedPrograms = {};
     }
 }
