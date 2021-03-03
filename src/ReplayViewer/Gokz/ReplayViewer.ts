@@ -427,7 +427,7 @@ export class ReplayViewer extends MapViewer {
         this.replayLoaded.dispatch(this.replay);
 
         if (this.currentMapName !== replay.mapName) {
-            if (this.currentMapName != null) {
+            if (this.currentMapName !== null) {
                 this.map.unload();
             }
 
@@ -445,10 +445,10 @@ export class ReplayViewer extends MapViewer {
     protected onUpdateFrame(dt: number): void {
         super.onUpdateFrame(dt);
 
-        if (this.replay != this.lastReplay) {
+        if (this.replay !== this.lastReplay) {
             this.lastReplay = this.replay;
 
-            if (this.replay != null) {
+            if (this.replay !== null) {
                 this.onChangeReplay(this.replay);
             }
         }

@@ -1,4 +1,4 @@
-﻿import { ColorConversion, IAmbientSample, IPageInfo, MapViewer, PagedLoader, ResourcePage } from ".";
+import { ColorConversion, IAmbientSample, IPageInfo, MapViewer, PagedLoader, ResourcePage } from ".";
 import { IVector3, Vector3 } from "../Facepunch";
 import { DrawListItem, MeshHandle, RenderResource } from "../Facepunch/WebGame";
 

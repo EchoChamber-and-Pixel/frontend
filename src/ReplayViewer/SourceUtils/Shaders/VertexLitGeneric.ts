@@ -1,4 +1,4 @@
-﻿import { ModelBase, ModelBaseMaterial } from ".";
+import { ModelBase, ModelBaseMaterial } from ".";
 import { VertexAttribute } from "../../Facepunch/WebGame";
 
 export class VertexLitGenericMaterial extends ModelBaseMaterial {

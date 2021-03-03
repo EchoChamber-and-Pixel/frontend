@@ -1,4 +1,4 @@
-﻿import { BaseMaterialProps, BaseShaderProgram, Camera, CommandBuffer, Texture, TextureUtils, Uniform1I, UniformMatrix4, UniformSampler, VertexAttribute } from "../../Facepunch/WebGame";
+import { BaseMaterialProps, BaseShaderProgram, Camera, CommandBuffer, Texture, TextureUtils, Uniform1I, UniformMatrix4, UniformSampler, VertexAttribute } from "../../Facepunch/WebGame";
 
 export class SkyMaterial extends BaseMaterialProps {
     facePosX: Texture | null = null;

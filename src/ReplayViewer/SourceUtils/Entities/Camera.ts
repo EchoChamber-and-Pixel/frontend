@@ -1,4 +1,4 @@
-﻿import { IEnvFogController } from ".";
+import { IEnvFogController } from ".";
 import { BspLeaf, LeafFlags, MapViewer } from "..";
 import { Vector3, Quaternion, Vector4, Box3 } from "../../Facepunch";
 import { PerspectiveCamera, DrawList, OrthographicCamera } from "../../Facepunch/WebGame";

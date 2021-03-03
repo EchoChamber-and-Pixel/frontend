@@ -1,4 +1,4 @@
-﻿import { IPageInfo, MapViewer, PagedLoader, ResourcePage } from ".";
+import { IPageInfo, MapViewer, PagedLoader, ResourcePage } from ".";
 import { IMaterialInfo, ITextureInfo, Material, MaterialLoadable, MaterialPropertyType } from "../Facepunch/WebGame";
 
 export interface IMapMaterialPage {

@@ -1,4 +1,4 @@
-﻿import { ShaderProgram, CommandBuffer, Material } from "../../Facepunch/WebGame";
+import { ShaderProgram, CommandBuffer, Material } from "../../Facepunch/WebGame";
 
 export class BaseMaterial {
     cullFace = true;

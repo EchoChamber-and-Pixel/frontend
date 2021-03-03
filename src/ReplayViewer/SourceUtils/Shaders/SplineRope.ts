@@ -1,4 +1,4 @@
-﻿import { ModelBase, ModelBaseMaterial } from ".";
+import { ModelBase, ModelBaseMaterial } from ".";
 import { Vector3 } from "../../Facepunch";
 import { CommandBuffer, Uniform3F, VertexAttribute } from "../../Facepunch/WebGame";
 

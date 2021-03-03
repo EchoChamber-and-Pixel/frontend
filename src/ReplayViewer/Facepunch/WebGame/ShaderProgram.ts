@@ -217,9 +217,9 @@ export abstract class ShaderProgram {
 
             let found = false;
 
-            if (attribs != null) {
+            if (attribs !== null && attribs !== undefined) {
                 for (let j = 0, jEnd = attribs.length; j < jEnd; ++j) {
-                    if (attribs[j].id == id) {
+                    if (attribs[j].id === id) {
                         found = true;
                         break;
                     }

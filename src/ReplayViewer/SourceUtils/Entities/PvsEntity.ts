@@ -1,4 +1,4 @@
-﻿import { IVector3 } from "../../Facepunch";
+import { IVector3 } from "../../Facepunch";
 import { DrawableEntity, DrawList } from "../../Facepunch/WebGame";
 import { Map } from "..";
 

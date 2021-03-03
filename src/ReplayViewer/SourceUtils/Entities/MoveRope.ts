@@ -1,4 +1,4 @@
-﻿import { IPvsEntity, PvsEntity } from ".";
+import { IPvsEntity, PvsEntity } from ".";
 import { Vector3 } from "../../Facepunch";
 import { Material, MeshHandle, IMeshData, VertexAttribute, DrawMode, DrawList } from "../../Facepunch/WebGame";
 import { SplineRopeMaterial } from "../Shaders";

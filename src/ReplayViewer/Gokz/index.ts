@@ -4,5 +4,6 @@ export * from './KeyDisplay';
 export * from './OptionsMenu';
 export * from './ReplayControls';
 export * from './ReplayFile';
+export * from './ReplayViewer';
 export * from './RouteLine';
 export * from './Utils';

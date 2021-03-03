@@ -82,7 +82,7 @@ export class TickData {
     flags: EntityFlag = 0;
 
     getEyeHeight(): number {
-        return (this.flags & EntityFlag.Ducking) != 0 ? 46 : 64;
+        return (this.flags & EntityFlag.Ducking) !== 0 ? 46 : 64;
     }
 }
 

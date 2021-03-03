@@ -1,4 +1,4 @@
-﻿import { Vector3 } from "../../Facepunch";
+import { Vector3 } from "../../Facepunch";
 import { BaseMaterialProps, BaseShaderProgram, Camera, CommandBuffer, Fog, Texture, TextureUtils, Uniform1F, Uniform1I, Uniform3F, Uniform4F, UniformMatrix4, UniformSampler, VertexAttribute } from "../../Facepunch/WebGame";
 
 export class ModelBaseMaterial extends BaseMaterialProps {

@@ -1,4 +1,4 @@
-﻿import { LightmappedBaseMaterial, LightmappedBase } from ".";
+import { LightmappedBaseMaterial, LightmappedBase } from ".";
 import { Vector3 } from "../../Facepunch";
 import { Camera, CommandBuffer, Game, Texture, TextureUtils, Uniform1F, Uniform3F, Uniform4F, UniformMatrix4, UniformSampler } from "../../Facepunch/WebGame";
 

@@ -1,4 +1,4 @@
-﻿import { LightmappedBaseMaterial, LightmappedBase } from ".";
+import { LightmappedBaseMaterial, LightmappedBase } from ".";
 
 export class LightmappedGenericMaterial extends LightmappedBaseMaterial {
 }

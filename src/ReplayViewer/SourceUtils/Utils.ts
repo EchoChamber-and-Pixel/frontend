@@ -1,4 +1,4 @@
-﻿import { IVector3, Vector3 } from "../Facepunch";
+import { IVector3, Vector3 } from "../Facepunch";
 
 export class ColorConversion {
     private static lastScreenGamma: number;

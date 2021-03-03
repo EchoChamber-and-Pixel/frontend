@@ -660,7 +660,7 @@ export class TextureLoadable extends Texture implements ILoadable {
 
         handle = this.frameHandles[frame] = gl.createTexture() as WebGLTexture;
 
-        if (this.info.params != null) {
+        if (this.info.params !== null) {
             gl.bindTexture(this.target, handle);
             this.applyTexParameters();
             gl.bindTexture(this.target, null);
@@ -686,7 +686,7 @@ export class TextureLoadable extends Texture implements ILoadable {
         const r = color.r;
         const g = color.g;
         const b = color.b;
-        const a = color.a == undefined ? 1 : color.a;
+        const a = color.a === undefined ? 1 : color.a;
 
         for (let i = 0; i < pixelCount; ++i) {
             const index = i * 4;
@@ -727,7 +727,7 @@ export class TextureLoadable extends Texture implements ILoadable {
     }
 
     private loadElement(element: ITextureElement, value?: HTMLImageElement): boolean {
-        const target = WebGl.decodeConst(element.target != undefined ? element.target : this.info.target);
+        const target = WebGl.decodeConst(element.target !== undefined ? element.target : this.info.target);
         const frame = element.frame || 0;
         const handle = this.getOrCreateHandle(frame);
 

@@ -1,4 +1,4 @@
-﻿import { BspLeaf, MapViewer, SkyCube } from ".";
+import { BspLeaf, MapViewer, SkyCube } from ".";
 import { Http, IVector3, Vector3 } from "../Facepunch";
 import { CommandBuffer, CommandBufferParameter, DrawList, ICommandBufferParameterProvider, MaterialLoadable, TextureLoadable, TextureUtils, UniformType } from "../Facepunch/WebGame";
 import { BrushEntity, Displacement, Entity, IBrushEntity, IDisplacement, IEntity, IEnvFogController, IKeyframeRope, IMoveRope, ISkyCamera, IStaticProp, IWorldspawn, KeyframeRope, MoveRope, PvsEntity, SkyCamera, StaticProp, Worldspawn } from "./Entities";

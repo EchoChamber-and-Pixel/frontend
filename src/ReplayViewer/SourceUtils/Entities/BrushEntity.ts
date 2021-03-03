@@ -1,4 +1,4 @@
-﻿import { IPvsEntity, PvsEntity } from ".";
+import { IPvsEntity, PvsEntity } from ".";
 import { BspModel } from "..";
 import { DrawList } from "../../Facepunch/WebGame";
 import { Map } from "..";

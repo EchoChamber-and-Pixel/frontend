@@ -1,4 +1,4 @@
-﻿import { IPageInfo } from ".";
+import { IPageInfo } from ".";
 import { Http, ILoader } from "../Facepunch";
 
 export interface IPageRequest<TValue, TPage> {

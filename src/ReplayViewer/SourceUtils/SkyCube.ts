@@ -1,4 +1,4 @@
-﻿import { MapViewer } from ".";
+import { MapViewer } from ".";
 import { DrawListItem, DrawMode, IMeshData, Material, VertexAttribute } from "../Facepunch/WebGame";
 
 export class SkyCube extends DrawListItem {

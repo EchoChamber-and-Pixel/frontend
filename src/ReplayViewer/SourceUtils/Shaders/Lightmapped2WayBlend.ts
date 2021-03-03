@@ -1,4 +1,4 @@
-﻿import { LightmappedBaseMaterial, LightmappedBase } from ".";
+import { LightmappedBaseMaterial, LightmappedBase } from ".";
 import { Texture, VertexAttribute, TextureUtils, CommandBuffer, Uniform1I, UniformSampler } from "../../Facepunch/WebGame";
 
 export class Lightmapped2WayBlendMaterial extends LightmappedBaseMaterial {

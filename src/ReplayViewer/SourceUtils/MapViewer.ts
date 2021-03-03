@@ -1,4 +1,4 @@
-﻿import { CommandBuffer, Game, Key } from "../Facepunch/WebGame";
+import { CommandBuffer, Game, Key } from "../Facepunch/WebGame";
 import { Camera } from "./Entities";
 import { AmbientLoader, BspModelLoader, DispGeometryLoader, LeafGeometryLoader, Map, MapMaterialLoader, StudioModelLoader, VertexLightingLoader, VisLoader } from ".";
 import { Quaternion, Vector2, Vector3 } from "../Facepunch";

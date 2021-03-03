@@ -1,4 +1,4 @@
-﻿import { ModelBase, ModelBaseMaterial } from ".";
+import { ModelBase, ModelBaseMaterial } from ".";
 import { Map } from "..";
 import { UniformSampler, VertexAttribute, TextureUtils, CommandBuffer, Texture } from "../../Facepunch/WebGame";
 

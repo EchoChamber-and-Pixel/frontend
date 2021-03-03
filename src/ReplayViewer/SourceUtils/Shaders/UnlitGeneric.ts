@@ -1,4 +1,4 @@
-﻿import { ModelBase, ModelBaseMaterial } from ".";
+import { ModelBase, ModelBaseMaterial } from ".";
 
 export class UnlitGenericMaterial extends ModelBaseMaterial {
 

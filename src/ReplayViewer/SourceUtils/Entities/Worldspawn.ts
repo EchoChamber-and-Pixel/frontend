@@ -1,4 +1,4 @@
-﻿import { IBrushEntity, BrushEntity } from ".";
+import { IBrushEntity, BrushEntity } from ".";
 import { BspLeaf } from "..";
 import { IMaterialInfo, DrawList } from "../../Facepunch/WebGame";
 import { Map } from "..";

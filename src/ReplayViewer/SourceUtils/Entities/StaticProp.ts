@@ -1,4 +1,4 @@
-﻿import { IPvsEntity, PvsEntity } from ".";
+import { IPvsEntity, PvsEntity } from ".";
 import { BspLeaf, StudioModel } from "..";
 import { Map } from "../";
 

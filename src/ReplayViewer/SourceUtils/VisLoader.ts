@@ -1,4 +1,4 @@
-﻿import { IPageInfo, PagedLoader, ResourcePage } from ".";
+import { IPageInfo, PagedLoader, ResourcePage } from ".";
 import { Utils } from "../Facepunch";
 
 export interface IVisPage {

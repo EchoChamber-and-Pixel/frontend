@@ -1,4 +1,4 @@
-﻿import { IFace, IMaterialGroup, IPageInfo, MapViewer, PagedLoader, ResourcePage } from ".";
+import { IFace, IMaterialGroup, IPageInfo, MapViewer, PagedLoader, ResourcePage } from ".";
 import { MeshHandle, MeshManager } from "../Facepunch/WebGame";
 
 export interface IDispGeometryPage {

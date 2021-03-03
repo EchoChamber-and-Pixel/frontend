@@ -1,4 +1,4 @@
-﻿import { BspLeaf, ColorConversion, IMaterialGroup, IPageInfo, MapViewer, PagedLoader, ResourcePage } from ".";
+import { BspLeaf, ColorConversion, IMaterialGroup, IPageInfo, MapViewer, PagedLoader, ResourcePage } from ".";
 import { IVector3, Matrix4, Utils, Vector3, Vector4 } from "../Facepunch";
 import { IMeshData, MeshHandle, MeshManager, RenderResource, VertexAttribute } from "../Facepunch/WebGame";
 

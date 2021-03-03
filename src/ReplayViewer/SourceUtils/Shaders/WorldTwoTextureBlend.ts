@@ -1,4 +1,4 @@
-﻿import { LightmappedBase, LightmappedBaseMaterial } from ".";
+import { LightmappedBase, LightmappedBaseMaterial } from ".";
 import { CommandBuffer, Texture, TextureUtils, Uniform1F, UniformSampler } from "../../Facepunch/WebGame";
 
 export class WorldTwoTextureBlendMaterial extends LightmappedBaseMaterial {
