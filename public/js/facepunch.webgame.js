@@ -1309,6 +1309,7 @@ var Facepunch;
         };
         Http.getImage = function (url, success, failure, progress) {
             var image = new Image();
+            image.crossOrigin = "anonymous";
             image.src = url;
             image.addEventListener("load", function (ev) { return success(image); });
             if (failure != null) {
