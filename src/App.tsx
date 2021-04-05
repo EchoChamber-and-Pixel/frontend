@@ -12,7 +12,7 @@ function App() {
       <NavigationBar />
       <Switch>
         <Route path="/" component={Records} exact />
-        <Route path="/:replayId" component={Replay} exact />
+        <Route path="/replay/:replayId" component={Replay} exact />
         <Route component={Error} />
       </Switch>
     </div>
