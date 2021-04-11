@@ -1,6 +1,7 @@
 import React from "react";
 import { Nav, Navbar, NavbarBrand, NavItem } from "reactstrap";
 import { ExternalNavbarLink } from "../StyledComponents/ExternalNavbarLink";
+import { NavbarLink } from "../StyledComponents/NavbarLink";
 
 /**
  * Render component for the navigation bar.
@@ -15,6 +16,9 @@ function NavigationBar() {
         </span>
       </NavbarBrand>
       <Nav className="mr-auto" navbar>
+        <NavItem>
+          <NavbarLink to="/upload">Upload</NavbarLink>
+        </NavItem>
         <NavItem>
           <ExternalNavbarLink href="https://github.com/EchoChamber-and-Pixel">
             GitHub Source{" "}
