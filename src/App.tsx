@@ -5,6 +5,7 @@ import NavigationBar from "./Components/NavigationBar";
 import Error from "./Pages/Error";
 import Records from "./Pages/Records";
 import Replay from "./Pages/Replay";
+import Upload from "./Pages/Upload";
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
       <NavigationBar />
       <Switch>
         <Route path="/" component={Records} exact />
+        <Route path="/upload" component={Upload} exact />
         <Route path="/replay/:replayId" component={Replay} exact />
         <Route component={Error} />
       </Switch>
