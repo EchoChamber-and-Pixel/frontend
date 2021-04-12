@@ -655,6 +655,18 @@ var Gokz;
             reader.readString();
             this.playerName = reader.readString();
             this.tickCount = reader.readInt32();
+            /**fix for cheater replays */
+            if (this.course < 0)
+                this.course = 0;
+            if (this.mode < 0)
+                this.mode = 0;
+            if (this.style < 0)
+                this.style = 0;
+            if (this.teleportsUsed < 0)
+                this.teleportsUsed = 0;
+            if (this.time < 0)
+                this.time = this.tickCount * (1/128);
+            /* ---- */
             this.tickRate = Math.round(this.tickCount / this.time); // todo
             this.firstTickOffset = reader.getOffset();
             this.tickSize = 7 * 4;
