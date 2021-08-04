@@ -13,11 +13,12 @@ function modeToString(mode: number) {
 
 // https://stackoverflow.com/a/52560608
 const format = (val: number) => `0${Math.floor(val)}`.slice(-2);
-function formatTime(seconds: number) {
-    const hours = seconds / 3600
-    const minutes = (seconds % 3600) / 60
+function formatTime(timeS: number) {
+    const hours = timeS / 3600;
+    const minutes = (timeS % 3600) / 60;
+    const seconds = timeS % 60;
 
-    return [hours, minutes, seconds % 60].map(format).join(':')
+    return [hours, minutes, seconds].map(format).join(':');
 }
 
 function Replay() {
@@ -37,8 +38,7 @@ function Replay() {
             setReplay(replayFile);
         });
 
-        const replayUrl = `https://ruto.sh/api/replays/${replayId}`;
-        // console.log(replayUrl);
+        const replayUrl = `/api/replays/${replayId}`;
         viewer.loadReplay(replayUrl);
         viewer.animate();
     }, [replayId]);
@@ -48,7 +48,7 @@ function Replay() {
             <div>
                 { replay ? <h1>{replay.playerName} [{modeToString(replay.mode)} | { replay.course}] ON {replay.mapName} - {formatTime(replay.time)}</h1> : <h1>Loading</h1> }
             </div>
-            <div ref={div} id="asdf"></div>
+            <div ref={div} id="replaybox"></div>
         </div>
     )
 }
