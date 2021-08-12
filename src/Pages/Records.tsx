@@ -1,7 +1,7 @@
 import moment from "moment";
-import { useEffect, useState } from "react";
-import { Table } from "reactstrap";
-import { GetRecords } from "../API/RecordsEndpoints";
+import { ChangeEvent, useEffect, useState } from "react";
+import { FormGroup, Input, Label, Table } from "reactstrap";
+import { GetMaps, GetRecords } from "../API/RecordsEndpoints";
 import Record from '../Models/Record';
 
 // https://stackoverflow.com/a/52560608
@@ -19,15 +19,27 @@ function formatTime(timeS: number) {
  */
 function Records() {
   const [records, setRecords] = useState<Record[]>([]);
+  const [maps, setMaps] = useState<string[]>([]);
+  const [mapFilter, setMapFilter] = useState<string>('');
+
+  const fetchRecords = async () => {
+    const data = await GetRecords(mapFilter);
+    setRecords(data);
+  };
+
+  const fetchMaps = async () => {
+    const data = await GetMaps();
+    setMaps(data.map(ele => ele.name));
+  }
+
+  const onFilterChange = function (evt: ChangeEvent<HTMLInputElement>) {
+    setMapFilter(evt.target.value);
+  }
 
   useEffect(() => {
-    const fetchData = async () => {
-      const data = await GetRecords();
-      setRecords(data);
-    };
-
-    fetchData();
-  }, []);
+    fetchRecords();
+    fetchMaps();
+  }, [mapFilter]);
 
   return (
     <div
@@ -44,6 +56,15 @@ function Records() {
           ⏺
         </span>
       </legend>
+      <FormGroup>
+        <Label for="mapSelect">Map</Label>
+        <Input type="select" name="mapSelect" id="mapSelect" onChange={onFilterChange}>
+          <option value="">Filter map</option>
+          {maps.map((map, i) => {
+            return <option key={i} value={map}>{map}</option>
+          })}
+        </Input>
+      </FormGroup>
       <Table striped hover>
         <thead>
           <tr>
